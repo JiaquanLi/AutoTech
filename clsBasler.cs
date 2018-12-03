@@ -20,6 +20,27 @@ namespace AutoTech
         private PixelDataConverter converter = new PixelDataConverter();
         private Stopwatch stopWatch = new Stopwatch();
 
+        public  struct ConnectionType
+        {
+            public const string _Connect = "Connect";
+            public const string _DisConnect = "DisConnect";
+            public const string _StopContinusShot = "StopContinusShot";
+            public const string _OneShot = "OneShot";
+            public const string _ContinusShot = "ContinusShot";
+        }
+
+        public enum en_ConnectStatue
+        {
+            _Invalid = -1,
+            _Connected,
+            _DisConnected,
+            _ContinusShot,
+            _StopContinusShot,
+            _OneShot
+
+        }
+
+
 
         public CCBasler(ref System.Windows.Forms.PictureBox pbxImage)
         {
@@ -43,9 +64,28 @@ namespace AutoTech
             catch (Exception exception)
             {
                 //ShowException(exception);
+                System.Windows.Forms.MessageBox.Show("Exception caught:\n" + exception.Message, "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
             }
 
             return lstDevInfo;
+        }
+
+        public int GetCameralImageWidth()
+        {
+            if (objCamera == null) return -1;
+
+            return (int)objCamera.Parameters[PLCamera.Width].GetMaximum();
+
+
+        }
+
+        public int GetCameralImageHeight()
+        {
+            if (objCamera == null) return -1;
+
+            return (int)objCamera.Parameters[PLCamera.Height].GetMaximum();
+
+
         }
 
         public void SetDeviceInfo(ICameraInfo devInfo)
@@ -69,7 +109,7 @@ namespace AutoTech
 
         // Occurs when a new camera has been selected in the list. Destroys the object of the currently opened camera device and
         // creates a new object for the selected camera device. After that, the connection to the selected camera device is opened.
-        public void ConnectToDevice()
+        public bool ConnectToDevice()
         {
             // Destroy the old camera object.
             if (objCamera != null)
@@ -80,8 +120,6 @@ namespace AutoTech
             // Open the connection to the selected camera device.
             //if (deviceListView.SelectedItems.Count > 0)
             {
-                // Get the first selected item.
-                //ListViewItem item = deviceListView.SelectedItems[0];
                 // Get the attached device data.
                 ICameraInfo selectedCamera = objICameraInfo;//item.Tag as ICameraInfo;
                 try
@@ -102,36 +140,18 @@ namespace AutoTech
                     // Open the connection to the camera device.
                     objCamera.Open();
 
-                    //// Set the parameter for the controls.
-                    //testImageControl.Parameter = objCamera.Parameters[PLCamera.TestImageSelector];
-                    //pixelFormatControl.Parameter = objCamera.Parameters[PLCamera.PixelFormat];
-                    //widthSliderControl.Parameter = objCamera.Parameters[PLCamera.Width];
-                    //heightSliderControl.Parameter = objCamera.Parameters[PLCamera.Height];
-                    //if (objCamera.Parameters.Contains(PLCamera.GainAbs))
-                    //{
-                    //    gainSliderControl.Parameter = objCamera.Parameters[PLCamera.GainAbs];
-                    //}
-                    //else
-                    //{
-                    //    gainSliderControl.Parameter = objCamera.Parameters[PLCamera.Gain];
-                    //}
-                    //if (camera.Parameters.Contains(PLCamera.ExposureTimeAbs))
-                    //{
-                    //    exposureTimeSliderControl.Parameter = objCamera.Parameters[PLCamera.ExposureTimeAbs];
-                    //}
-                    //else
-                    //{
-                    //    exposureTimeSliderControl.Parameter = objCamera.Parameters[PLCamera.ExposureTime];
-                    //}
                 }
                 catch (Exception exception)
                 {
                     ShowException(exception);
+                    return false;
                 }
             }
+
+            return true;
         }
 
-        private void DestroyCamera()
+        public void DestroyCamera()
         {
             // Disable all parameter controls.
             try
@@ -139,12 +159,6 @@ namespace AutoTech
                 if (objCamera != null)
                 {
 
-                    //testImageControl.Parameter = null;
-                    //pixelFormatControl.Parameter = null;
-                    //widthSliderControl.Parameter = null;
-                    //heightSliderControl.Parameter = null;
-                    //gainSliderControl.Parameter = null;
-                    //exposureTimeSliderControl.Parameter = null;
                 }
             }
             catch (Exception exception)
@@ -196,8 +210,6 @@ namespace AutoTech
                 return;
             }
 
-            // The image provider is ready to grab. Enable the grab buttons.
-            //EnableButtons(true, false);
         }
 
 
@@ -211,8 +223,6 @@ namespace AutoTech
                 return;
             }
 
-            // The camera connection is closed. Disable all buttons.
-            //EnableButtons(false, false);
         }
 
 
@@ -229,12 +239,6 @@ namespace AutoTech
             // Reset the stopwatch used to reduce the amount of displayed images. The camera may acquire images faster than the images can be displayed.
 
             stopWatch.Reset();
-
-            // Do not update the device list while grabbing to reduce jitter. Jitter may occur because the GUI thread is blocked for a short time when enumerating.
-            //updateDeviceListTimer.Stop();
-
-            // The camera is grabbing. Disable the grab buttons. Enable the stop button.
-            //EnableButtons(false, true);
         }
 
 
@@ -310,18 +314,41 @@ namespace AutoTech
             // Reset the stopwatch.
             stopWatch.Reset();
 
-            // Re-enable the updating of the device list.
-            //updateDeviceListTimer.Start();
-
-            // The camera stopped grabbing. Enable the grab buttons. Disable the stop button.
-            //EnableButtons(true, false);
-
             // If the grabbed stop due to an error, display the error message.
             if (e.Reason != GrabStopReason.UserRequest)
             {
                 System.Windows.Forms.MessageBox.Show("A grab error occured:\n" + e.ErrorMessage, "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
             }
         }
+
+        // Starts the grabbing of a single image and handles exceptions.
+        public void OneShot()
+        {
+            try
+            {
+                // Starts the grabbing of one image.
+                objCamera.Parameters[PLCamera.AcquisitionMode].SetValue(PLCamera.AcquisitionMode.SingleFrame);
+                objCamera.StreamGrabber.Start(1, GrabStrategy.OneByOne, GrabLoop.ProvidedByStreamGrabber);
+            }
+            catch (Exception exception)
+            {
+                ShowException(exception);
+            }
+        }
+
+        public void Stop()
+        {
+            // Stop the grabbing.
+            try
+            {
+                objCamera.StreamGrabber.Stop();
+            }
+            catch (Exception exception)
+            {
+                ShowException(exception);
+            }
+        }
+
         private void  ShowException(Exception exception)
         {
             System.Windows.Forms.MessageBox.Show("Exception caught:\n" + exception.Message, "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);

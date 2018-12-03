@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Basler.Pylon;
 using GxMultiCam;
 using Telerik.WinControls.UI;
+ 
 
 namespace AutoTech
 {
@@ -18,7 +19,8 @@ namespace AutoTech
 
         List<CCamerInfo> m_listCCamerInfo = new List<CCamerInfo>();           ///相机参数状态列表
         List<ICameraInfo> m_listallCameras = new List<ICameraInfo>();
-
+        private clsFixture m_objFixture = null;
+        clsFixture.stComPort m_objComPort;
 
         public RadForm1()
         {
@@ -33,38 +35,10 @@ namespace AutoTech
 
         private void RadForm1_Load(object sender, EventArgs e)
         {
-            
-            CCamerInfo objCCamerInfo = new CCamerInfo();
-            CCamerInfo objCCamerInfo2 = new CCamerInfo();
-            m_listCCamerInfo.Add(objCCamerInfo);
-            m_listCCamerInfo.Add(objCCamerInfo2);
-
-
-            frmShowImage objImageShowFrom = new frmShowImage();
-            m_listCCamerInfo[0].m_objImageShowFrom = objImageShowFrom;
-
-            System.Windows.Forms.PictureBox pbx = objImageShowFrom.PbxShowImage;
-            CCBasler objBasler = new CCBasler(ref pbx);
-            m_listCCamerInfo[0].m_objBasler = objBasler;
-
-
-            frmShowImage objImageShowFrom2 = new frmShowImage();
-            m_listCCamerInfo[1].m_objImageShowFrom = objImageShowFrom2;
-
-            System.Windows.Forms.PictureBox pbx2 = objImageShowFrom2.PbxShowImage;
-            CCBasler objBasler2 = new CCBasler(ref pbx2);
-            m_listCCamerInfo[1].m_objBasler = objBasler2;
-
-
-            //__SelectDeviceAndShow(0);
-
-            //__SelectDeviceAndShow(1);
-
+            InitialHal();
             UpdateDeviceTree();
 
         }
-
-
 
         private void pb_image_MouseMove(object sender, MouseEventArgs e)
         {
@@ -78,185 +52,304 @@ namespace AutoTech
             objfrmAbout.Show();
         }
 
-
-        private void UpdateDeviceTree()
+        private void radTreeView_Devices_NodeMouseClick(object sender, RadTreeViewEventArgs e)
         {
-            //RadTreeNode root = this.radTreeView_Devices.Nodes.Add("Cameral Device");
-            //root.Nodes.Add("Microsoft Research News and Highlights", 1);
+            CCamerInfo objCCamerInfo = null;
 
-            //root.Nodes.Add("Joel on Software", 1);
-            //root.Nodes.Add("Miguel de Icaza", 1);
-            //root.Nodes.Add("channel 9", 1);
+            string  strCameralName ;
+            string strFtName ;
+            
 
-            //root = this.radTreeView_Devices.Nodes.Add("News (1)");
-            //root.Nodes.Add("cnn.com (1)", 1);
-            //root.Nodes.Add("msnbc.com", 1);
-            //root.Nodes.Add("reuters.com", 1);
-            //root.Nodes.Add("bbc.co.uk", 1);
+            if (e.Node.Parent == null) return;
 
-            //root = this.radTreeView_Devices.Nodes.Add("Personal (19)");
-            //root.Nodes.Add("sports (2)", 1);
-            //RadTreeNode folder = root.Nodes.Add("fun (17)");
-            //folder.Nodes.Add("Lolcats (2)", 1);
-            //folder.Nodes.Add("FFFOUND (15)", 1);
+            strCameralName = e.Node.Parent.Text;
+            strFtName = e.Node.Text.ToString();
 
-            //this.radTreeView_Devices.Nodes.Add("Telerik blogs", 1);
-            //this.radTreeView_Devices.Nodes.Add("Techcrunch", 1);
-            //this.radTreeView_Devices.Nodes.Add("Engadget", 1);
-
-            try
+            for (int i = 0; i < m_listCCamerInfo.Count; i++)
             {
-                // Ask the camera finder for a list of camera devices.
-                //List<ICameraInfo> allCameras = CameraFinder.Enumerate();
-                m_listallCameras = CCBasler.GetDeviceList();
-
-                //ListView.ListViewItemCollection items = deviceListView.Items;
-
-                // Loop over all cameras found.
-                foreach (ICameraInfo cameraInfo in m_listallCameras)
+                if(m_listCCamerInfo[i].m_objCameraInfo[CameraInfoKey.FriendlyName] == strCameralName)
                 {
-                    // Loop over all cameras in the list of cameras.
-                    bool newitem = true;
-                    //foreach (ListViewItem item in items)
-                    //{
-                    //    ICameraInfo tag = item.Tag as ICameraInfo;
-
-                    //    // Is the camera found already in the list of cameras?
-                    //    if (tag[CameraInfoKey.FullName] == cameraInfo[CameraInfoKey.FullName])
-                    //    {
-                    //        tag = cameraInfo;
-                    //        newitem = false;
-                    //        break;
-                    //    }
-                    //}
-
-                    ICameraInfo tag = cameraInfo;
-
-                    // Is the camera found already in the list of cameras?
-                    //if (tag[CameraInfoKey.FullName] == cameraInfo[CameraInfoKey.FullName])
-                    //{
-                    //    tag = cameraInfo;
-                    //    newitem = false;
-                    //    break;
-                    //}
-
-                    // If the camera is not in the list, add it to the list.
-                    //if (newitem)
-                    {
-                        // Create the item to display.
-                        //ListViewItem item = new ListViewItem(cameraInfo[CameraInfoKey.FriendlyName]);
-                        //RadTreeNode root = this.radTreeView_Devices.Nodes.Add("Cameral Device");
-
-                        RadTreeNode root = this.radTreeView_Devices.Nodes.Add(cameraInfo[CameraInfoKey.FriendlyName],0);
-                        root.Nodes.Add("Video", 1);
-                        root.Nodes.Add("Shot", 1);
-
-                        // Create the tool tip text.
-                        //string toolTipText = "";
-                        //foreach (KeyValuePair<string, string> kvp in cameraInfo)
-                        //{
-                        //    toolTipText += kvp.Key + ": " + kvp.Value + "\n";
-                        //}
-                        //item.ToolTipText = toolTipText;
-
-                        // Store the camera info in the displayed item.
-                        //item.Tag = cameraInfo;
-
-                        // Attach the device data.
-                        //deviceListView.Items.Add(item);
-                    }
+                    objCCamerInfo = m_listCCamerInfo[i];
                 }
-
-
-
-                //// Remove old camera devices that have been disconnected.
-                //foreach (ListViewItem item in items)
-                //{
-                //    bool exists = false;
-
-                //    // For each camera in the list, check whether it can be found by enumeration.
-                //    foreach (ICameraInfo cameraInfo in allCameras)
-                //    {
-                //        if (((ICameraInfo)item.Tag)[CameraInfoKey.FullName] == cameraInfo[CameraInfoKey.FullName])
-                //        {
-                //            exists = true;
-                //            break;
-                //        }
-                //    }
-                //    // If the camera has not been found, remove it from the list view.
-                //    if (!exists)
-                //    {
-                //        deviceListView.Items.Remove(item);
-                //    }
-                //}
             }
-            catch (Exception exception)
+
+            if (objCCamerInfo == null) return;
+
+            switch(strFtName)
             {
-                ShowException(exception);
-            }
-        }
-        /// <summary>
-        /// 根据对应的设备对象绑定显示控件
-        /// </summary>
-        /// <param name="nCamID">相机ID</param>
-        private void __SelectDeviceAndShow(int nCamID)
-        {
-            switch (nCamID)
-            {
-                case 0:
+                case CCBasler.ConnectionType._Connect:
+                    if (objCCamerInfo.m_Flag == -1)
+                    { 
+                        objCCamerInfo.m_Flag = 0;
+                        if(__SelectDeviceAndShow(objCCamerInfo, objCCamerInfo.m_objCameraInfo) == false)
+                        {
+                            return;
+                        }
+                        objCCamerInfo.m_bIsOpen = true;
+                    }
+
+                    break;
+
+                case CCBasler.ConnectionType._DisConnect:
+                    if (objCCamerInfo.m_Flag != -1)
                     {
-                        m_listCCamerInfo[nCamID].m_objBasler.SetDeviceInfo(m_listallCameras[nCamID]);
-
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.TopLevel = false;
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.Parent = this.panel_image;
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.StartPosition = FormStartPosition.Manual;
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.Location = new Point(0, 0);
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.Show();
-
-                        m_listCCamerInfo[nCamID].m_objBasler.ConnectToDevice();
-                        m_listCCamerInfo[nCamID].m_objBasler.ContinuousShot();
+                        objCCamerInfo.m_objBasler.Stop();
+                        objCCamerInfo.m_objBasler.DestroyCamera();
+                        objCCamerInfo.m_objImageShowFrom.Hide();
+                        objCCamerInfo.m_Flag = -1;
+                        objCCamerInfo.m_bIsOpen = false;
                     }
                     break;
-                case 1:
-                    {
-;
-                        m_listCCamerInfo[nCamID].m_objBasler.SetDeviceInfo(m_listallCameras[nCamID]);
 
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.TopLevel = false;
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.Parent = this.panel_image;
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.StartPosition = FormStartPosition.Manual;
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.Location = new Point(400, 0);
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.Show();
+                case CCBasler.ConnectionType._ContinusShot:
+                    if (objCCamerInfo.m_Flag == -1)
+                    {
+                        MessageBox.Show("相机没有连接", "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        return;
+                    }
 
-                        m_listCCamerInfo[nCamID].m_objBasler.ConnectToDevice();
-                        m_listCCamerInfo[nCamID].m_objBasler.ContinuousShot();
-                    }
+                    if (objCCamerInfo.m_bIsSnap == true) return;
+
+                    objCCamerInfo.m_objBasler.ContinuousShot();
+                    objCCamerInfo.m_bIsSnap = true;
+
                     break;
-                case 2:
+
+                case CCBasler.ConnectionType._StopContinusShot:
+                    if (objCCamerInfo.m_Flag == -1)
                     {
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.MdiParent = this;
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.StartPosition = FormStartPosition.Manual;
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.Location = new Point(0, 330);
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.Show();
+                        MessageBox.Show("相机没有连接", "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        return;
                     }
+
+                    objCCamerInfo.m_objBasler.Stop();
+                    objCCamerInfo.m_bIsSnap = false;
                     break;
-                case 3:
+
+                case CCBasler.ConnectionType._OneShot:
+                    if (objCCamerInfo.m_Flag == -1)
                     {
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.MdiParent = this;
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.StartPosition = FormStartPosition.Manual;
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.Location = new Point(390, 330);
-                        m_listCCamerInfo[nCamID].m_objImageShowFrom.Show();
+                        MessageBox.Show("相机没有连接", "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        return;
                     }
+
+                    if(objCCamerInfo.m_bIsSnap == true)
+                    {
+                        MessageBox.Show("连续模式下拍照功能禁用", "Warnning", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
+                        return;
+                    }
+                    objCCamerInfo.m_objBasler.OneShot();
                     break;
+
                 default:
                     break;
             }
 
         }
+        private void UpdateDeviceTree()
+        {
+            try
+            {
+                m_listallCameras = CCBasler.GetDeviceList();
 
+                foreach (ICameraInfo cameraInfo in m_listallCameras)
+                {
+                    bool newitem = true;
+                    foreach (RadTreeNode radTreeNode in this.radTreeView_Devices.Nodes)
+                    {
+                        if(radTreeNode.Name == cameraInfo[CameraInfoKey.FriendlyName])
+                        {
+                            newitem = false;
+                            break;
+                        }
+                        
+                    }
+
+                    if(newitem)
+                    {
+                        RadTreeNode root = this.radTreeView_Devices.Nodes.Add(cameraInfo[CameraInfoKey.FriendlyName], 0);
+                        root.Nodes.Add(CCBasler.ConnectionType._Connect, 1);
+                        root.Nodes.Add(CCBasler.ConnectionType._DisConnect, 1);
+                        root.Nodes.Add(CCBasler.ConnectionType._OneShot, 1);
+                        root.Nodes.Add(CCBasler.ConnectionType._ContinusShot, 1);
+                        root.Nodes.Add(CCBasler.ConnectionType._StopContinusShot, 1);
+                        
+                        CCamerInfo objCCamerInfo = new CCamerInfo();
+                        frmShowImage objImageShowFrom = new frmShowImage();
+                        objImageShowFrom.Fixture = m_objFixture;
+                        objCCamerInfo.m_objImageShowFrom = objImageShowFrom;
+
+                        System.Windows.Forms.PictureBox pbx = objImageShowFrom.PbxShowImage;
+                        CCBasler objBasler = new CCBasler(ref pbx);
+                        objCCamerInfo.m_objBasler = objBasler;
+
+                        objCCamerInfo.m_objCameraInfo = cameraInfo;
+
+                        //add name
+                        objCCamerInfo.m_strDisplayName = cameraInfo[CameraInfoKey.FriendlyName];
+                        m_listCCamerInfo.Add(objCCamerInfo);
+                    }
+                }
+
+                // Remove old camera devices that have been disconnected.
+                List<RadTreeNode> lstRadTreeNodeRemove = new List<RadTreeNode>();
+                List<ICameraInfo> lstCameraInfoRemove = new List<ICameraInfo>();
+                List<CCamerInfo> lstCameraRemove = new List<CCamerInfo>();
+                foreach (RadTreeNode radTreeNode in this.radTreeView_Devices.Nodes)
+                {
+                    bool exists = false;
+                    ICameraInfo tempCamInfo = null;
+
+                    // For each camera in the list, check whether it can be found by enumeration.
+                    foreach (ICameraInfo cameraInfo in m_listallCameras)
+                    {
+
+                        tempCamInfo = cameraInfo;
+                        if (radTreeNode.Name == cameraInfo[CameraInfoKey.FriendlyName])
+                        {
+                            exists = true;
+                            break;
+                        }
+
+                    }
+                    // If the camera has not been found, remove it from the list view.
+                    if (!exists)
+                    {
+                        lstRadTreeNodeRemove.Add(radTreeNode);
+                        //lstCameraInfoRemove.Add(tempCamInfo);
+                    }
+                }
+
+                if(lstRadTreeNodeRemove.Count > 0)
+                {
+                    foreach(RadTreeNode rdTreeNode in lstRadTreeNodeRemove)
+                    {
+                        this.radTreeView_Devices.Nodes.Remove(rdTreeNode);
+                    }
+                }
+
+                if(lstRadTreeNodeRemove.Count > 0)
+                {
+                    foreach (RadTreeNode rdTreeNode in lstRadTreeNodeRemove)
+                    {
+                        foreach(CCamerInfo cmInfo in m_listCCamerInfo)
+                        {
+                            if (cmInfo.m_objCameraInfo[CameraInfoKey.FriendlyName] == rdTreeNode.Text)
+                            {
+                                //获取需要删除的 相机
+                                lstCameraRemove.Add(cmInfo);
+                            }
+                        }
+                    }
+
+                    foreach (CCamerInfo cmInfoForRemove in lstCameraRemove)
+                    {
+                        cmInfoForRemove.m_objBasler.Stop();
+                        cmInfoForRemove.m_objBasler.DestroyCamera();
+                        cmInfoForRemove.m_objImageShowFrom.Close();
+                        m_listCCamerInfo.Remove(cmInfoForRemove);
+
+                    }
+                }
+
+            }
+            catch (Exception exception)
+            {
+                ShowException(exception);
+            }
+
+           
+            this.radTreeView_Devices.Nodes.Refresh();
+        }
+        /// <summary>
+        /// 根据对应的设备对象绑定显示控件
+        /// </summary>
+        /// <param name="nCamID">相机ID</param>
+        private bool __SelectDeviceAndShow(CCamerInfo cameral, ICameraInfo cameralInfo)
+        {
+
+            bool b_sts = false;
+            cameral.m_objBasler.SetDeviceInfo(cameralInfo);
+            b_sts = cameral.m_objBasler.ConnectToDevice();
+            if (b_sts == false) return false;
+
+            cameral.m_objImageShowFrom.TitleText = cameral.m_strDisplayName;
+            cameral.m_objImageShowFrom.ImageHeight = cameral.m_objBasler.GetCameralImageHeight();
+            cameral.m_objImageShowFrom.ImageWidth = cameral.m_objBasler.GetCameralImageWidth();
+
+            cameral.m_objImageShowFrom.TopLevel = false;
+            cameral.m_objImageShowFrom.Parent = this.panel_image;
+            cameral.m_objImageShowFrom.StartPosition = FormStartPosition.Manual;
+            cameral.m_objImageShowFrom.Location = new Point(0, 0);
+            cameral.m_objImageShowFrom.Show();
+
+
+            return b_sts;
+
+        }
+
+        private void InitialHal()
+        {
+            m_objComPort = new clsFixture.stComPort();
+            if (Properties.Settings.Default.PLC_ComNum == "")
+            {
+                MessageBox.Show("Com Number 输入错误！");
+                return;
+            }
+            m_objComPort.strComPortNumber = Properties.Settings.Default.PLC_ComNum;
+
+            m_objComPort.iBaundRate = Properties.Settings.Default.PLC_BaudRate;
+
+            m_objComPort.iDataBit = Properties.Settings.Default.PLC_DataBit;
+
+            m_objComPort.iStopBit = Properties.Settings.Default.PLC_StopBit;
+
+            m_objComPort.strParity = Properties.Settings.Default.PLC_Parity;
+
+
+            m_objFixture = new clsFixture();
+            m_objFixture.ComPort = m_objComPort;
+            if (m_objFixture.InitFixture() == false)
+            {
+                MessageBox.Show("设备初始化失败!!!");
+                return;
+            }
+        }
         private void ShowException(Exception exception)
         {
             System.Windows.Forms.MessageBox.Show("Exception caught:\n" + exception.Message, "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+        }
+
+        private void RadForm1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            for (int i = 0; i < m_listCCamerInfo.Count; i++)
+            {
+                if (m_listCCamerInfo[i].m_Flag != -1)
+                {
+                    m_listCCamerInfo[i].m_objBasler.DestroyCamera();
+                }
+
+            }
+        }
+
+        private void radMenuItem_DevicesRefresh_Click(object sender, EventArgs e)
+        {
+            UpdateDeviceTree();
+        }
+
+        private void radMenuItemRecover_Click(object sender, EventArgs e)
+        {
+            tw_Camera.Show();
+            tw_Devices.Show();
+            tw_GlobalImage.Show();
+            tw_log.Show();
+        }
+
+        private void radMenuItem_ConfigSetting_Click(object sender, EventArgs e)
+        {
+            frmConfig fmConfig = new frmConfig();
+            fmConfig.Fixture = m_objFixture;
+            fmConfig.ShowDialog();
         }
     }
 }

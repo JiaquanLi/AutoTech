@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using AutoTech;
+using Basler.Pylon;
 
 
 namespace GxMultiCam
@@ -17,14 +18,16 @@ namespace GxMultiCam
         public bool                  m_bAcqSpeedLevel             = false;                                          ///<采集速度级别是否支持
         public bool                  m_bWhiteAutoSelectedIndex    = true;                                           ///<白平衡列表框转换标志
         public double                m_dFps                       = 0.0;			                                ///<帧率
-        //public IGXDevice             m_objIGXDevice               = null;                                           ///<设备对像
-        //public IGXStream             m_objIGXStream               = null;                                           ///<流对像
-        //public IGXFeatureControl     m_objIGXFeatureControl       = null;                                           ///<远端设备属性控制器对像
         public string                m_strBalanceWhiteAutoValue   = "Off";                                          ///<自动白平衡当前的值
         public string                m_strDisplayName             = "";                                             ///<设备显示名称
-        public string                m_strSN                      = "";                                             ///<序列号
-        //public GX_DEVICE_CLASS_LIST  m_emDeviceType               = GX_DEVICE_CLASS_LIST.GX_DEVICE_CLASS_UNKNOWN;   ///<设备类型   
-        public frmShowImage m_objImageShowFrom           = null;                                           ///<用于图像的显示
-        public CCBasler m_objBasler = null;
+        public string                m_strSN                      = "";                                             ///<序列号  
+        public frmShowImage          m_objImageShowFrom           = null;                                           ///<用于图像的显示
+        public CCBasler              m_objBasler                  = null;
+        public ICameraInfo           m_objCameraInfo              = null;             
+        public int                   m_Flag                       = -1;                                              ///<用于图像的显示窗口ID
+
+        public int                   m_iImageWidth     = 0;
+        public int                   m_iImageHigth     = 0;
+
     }
 }
