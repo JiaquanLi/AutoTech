@@ -17,16 +17,18 @@ namespace AutoTech
         private Camera objCamera = null;
         private ICameraInfo objICameraInfo;
 
+
         private PixelDataConverter converter = new PixelDataConverter();
         private Stopwatch stopWatch = new Stopwatch();
 
-        public  struct ConnectionType
+        public struct ConnectionType
         {
             public const string _Connect = "Connect";
             public const string _DisConnect = "DisConnect";
             public const string _StopContinusShot = "StopContinusShot";
             public const string _OneShot = "OneShot";
             public const string _ContinusShot = "ContinusShot";
+            public const string _Configuration = "Configuration";
         }
 
         public enum en_ConnectStatue
@@ -40,21 +42,19 @@ namespace AutoTech
 
         }
 
-
-
         public CCBasler(ref System.Windows.Forms.PictureBox pbxImage)
         {
             this.pbx_Image = pbxImage;
         }
 
-         ~CCBasler()
+        ~CCBasler()
         {
             DestroyCamera();
         }
 
-        public static List<ICameraInfo>  GetDeviceList()
+        public static List<ICameraInfo> GetDeviceList()
         {
-            List<ICameraInfo> lstDevInfo = null ;
+            List<ICameraInfo> lstDevInfo = null;
             try
             {
                 // Ask the camera finder for a list of camera devices.
@@ -347,6 +347,36 @@ namespace AutoTech
             {
                 ShowException(exception);
             }
+        }
+
+        public void SetParameter(ref FloatSliderUserControl expControl, ref FloatSliderUserControl gainControl ,ref IntSliderUserControl widthControl ,ref IntSliderUserControl heighControl )
+        {
+            // Set the parameter for the controls.
+            //testImageControl.Parameter = camera.Parameters[PLCamera.TestImageSelector];
+            //pixelFormatControl.Parameter = camera.Parameters[PLCamera.PixelFormat];
+            widthControl.Parameter = objCamera.Parameters[PLCamera.Width];
+            heighControl.Parameter = objCamera.Parameters[PLCamera.Height];
+
+            gainControl.DefaultName = "Gain";
+            expControl.DefaultName = "Exposure Time";
+            if (objCamera == null) return;
+            if (objCamera.Parameters.Contains(PLCamera.GainAbs))
+            {
+                gainControl.Parameter = objCamera.Parameters[PLCamera.GainAbs];
+            }
+            else
+            {
+                gainControl.Parameter = objCamera.Parameters[PLCamera.Gain];
+            }
+            if (objCamera.Parameters.Contains(PLCamera.ExposureTimeAbs))
+            {
+                expControl.Parameter = objCamera.Parameters[PLCamera.ExposureTimeAbs];
+            }
+            else
+            {
+                expControl.Parameter = objCamera.Parameters[PLCamera.ExposureTime];
+            }
+
         }
 
         private void  ShowException(Exception exception)

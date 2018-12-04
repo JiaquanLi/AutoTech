@@ -42,8 +42,7 @@ namespace AutoTech
 
         private void pb_image_MouseMove(object sender, MouseEventArgs e)
         {
-            tb_imgX.Text = e.X.ToString();
-            tb_imgY.Text = e.Y.ToString();
+
         }
 
         private void radMenuItemAbout_Click(object sender, EventArgs e)
@@ -52,6 +51,58 @@ namespace AutoTech
             objfrmAbout.Show();
         }
 
+        private void UpdateTreeViewIco(string funtionClick)
+        {
+            //Connect
+            
+            RadTreeNode treeNodeConnect = radTreeView_Devices.GetNodeByName(CCBasler.ConnectionType._Connect);
+            RadTreeNode treeNodeDisConnect = radTreeView_Devices.GetNodeByName(CCBasler.ConnectionType._DisConnect);
+            RadTreeNode treeNodeOneShot = radTreeView_Devices.GetNodeByName(CCBasler.ConnectionType._OneShot);
+            RadTreeNode treeNodeContinusShot = radTreeView_Devices.GetNodeByName(CCBasler.ConnectionType._ContinusShot);
+            RadTreeNode treeNodeStopContinusShot = radTreeView_Devices.GetNodeByName(CCBasler.ConnectionType._StopContinusShot);
+            RadTreeNode treeNodeStopConfiguration = radTreeView_Devices.GetNodeByName(CCBasler.ConnectionType._Configuration);
+
+
+            switch (funtionClick)
+            {
+                case CCBasler.ConnectionType._Connect:
+                    treeNodeConnect.ImageIndex = 1; //连接按键
+
+                    treeNodeOneShot.Enabled = true;
+                    treeNodeContinusShot.Enabled = true;
+                    treeNodeDisConnect.Enabled = true;
+                    treeNodeStopConfiguration.Enabled = true;
+                    break;
+
+                case CCBasler.ConnectionType._DisConnect:
+                    treeNodeConnect.ImageIndex = 2; //连接按键
+                    treeNodeDisConnect.Enabled = false;
+
+                    treeNodeOneShot.Enabled = false;
+                    treeNodeContinusShot.Enabled = false;
+                    treeNodeConnect.Enabled = true;
+                    treeNodeStopConfiguration.Enabled = false;
+                    break;
+
+                case CCBasler.ConnectionType._ContinusShot://关闭 onshot 打开 StopContinusShot
+
+                    treeNodeStopContinusShot.Enabled = true;
+                    treeNodeContinusShot.Enabled = false;
+                    treeNodeOneShot.Enabled = false;
+                    break;
+
+                case CCBasler.ConnectionType._StopContinusShot://关闭 onshot 打开 StopContinusShot
+
+                    treeNodeStopContinusShot.Enabled = false;
+                    treeNodeContinusShot.Enabled = true;
+                    treeNodeOneShot.Enabled = true;
+                    break;
+                default:
+                    break;
+            }
+
+
+        }
         private void radTreeView_Devices_NodeMouseClick(object sender, RadTreeViewEventArgs e)
         {
             CCamerInfo objCCamerInfo = null;
@@ -86,6 +137,8 @@ namespace AutoTech
                             return;
                         }
                         objCCamerInfo.m_bIsOpen = true;
+                        e.Node.ImageIndex = 1;
+                        UpdateTreeViewIco(strFtName);
                     }
 
                     break;
@@ -98,6 +151,7 @@ namespace AutoTech
                         objCCamerInfo.m_objImageShowFrom.Hide();
                         objCCamerInfo.m_Flag = -1;
                         objCCamerInfo.m_bIsOpen = false;
+                        UpdateTreeViewIco(strFtName);
                     }
                     break;
 
@@ -112,6 +166,7 @@ namespace AutoTech
 
                     objCCamerInfo.m_objBasler.ContinuousShot();
                     objCCamerInfo.m_bIsSnap = true;
+                    UpdateTreeViewIco(strFtName);
 
                     break;
 
@@ -124,6 +179,7 @@ namespace AutoTech
 
                     objCCamerInfo.m_objBasler.Stop();
                     objCCamerInfo.m_bIsSnap = false;
+                    UpdateTreeViewIco(strFtName);
                     break;
 
                 case CCBasler.ConnectionType._OneShot:
@@ -168,12 +224,31 @@ namespace AutoTech
                     if(newitem)
                     {
                         RadTreeNode root = this.radTreeView_Devices.Nodes.Add(cameraInfo[CameraInfoKey.FriendlyName], 0);
-                        root.Nodes.Add(CCBasler.ConnectionType._Connect, 1);
-                        root.Nodes.Add(CCBasler.ConnectionType._DisConnect, 1);
-                        root.Nodes.Add(CCBasler.ConnectionType._OneShot, 1);
-                        root.Nodes.Add(CCBasler.ConnectionType._ContinusShot, 1);
-                        root.Nodes.Add(CCBasler.ConnectionType._StopContinusShot, 1);
-                        
+                        root.Nodes.Add(CCBasler.ConnectionType._Connect, 2);
+                        root.Nodes.Add(CCBasler.ConnectionType._DisConnect, 3);
+                        root.Nodes.Add(CCBasler.ConnectionType._OneShot, 3);
+                        root.Nodes.Add(CCBasler.ConnectionType._ContinusShot, 3);
+                        root.Nodes.Add(CCBasler.ConnectionType._StopContinusShot, 3);
+                        root.Nodes.Add(CCBasler.ConnectionType._Configuration, 3);
+
+                        RadTreeNode treeNodeConnect = radTreeView_Devices.GetNodeByName(CCBasler.ConnectionType._Connect);
+                        treeNodeConnect.Enabled = true;
+
+                        RadTreeNode treeNodeDisConnect = radTreeView_Devices.GetNodeByName(CCBasler.ConnectionType._DisConnect);
+                        treeNodeDisConnect.Enabled = false;
+
+                        RadTreeNode treeNodeOneShot = radTreeView_Devices.GetNodeByName(CCBasler.ConnectionType._OneShot);
+                        treeNodeOneShot.Enabled = false;
+
+                        RadTreeNode treeNodeContinusShot = radTreeView_Devices.GetNodeByName(CCBasler.ConnectionType._ContinusShot);
+                        treeNodeContinusShot.Enabled = false;
+
+                        RadTreeNode treeNodeStopContinusShot = radTreeView_Devices.GetNodeByName(CCBasler.ConnectionType._StopContinusShot);
+                        treeNodeStopContinusShot.Enabled = false;
+
+                        RadTreeNode treeNodeConfiguration = radTreeView_Devices.GetNodeByName(CCBasler.ConnectionType._Configuration);
+                        treeNodeConfiguration.Enabled = false;
+
                         CCamerInfo objCCamerInfo = new CCamerInfo();
                         frmShowImage objImageShowFrom = new frmShowImage();
                         objImageShowFrom.Fixture = m_objFixture;
@@ -265,23 +340,22 @@ namespace AutoTech
         /// 根据对应的设备对象绑定显示控件
         /// </summary>
         /// <param name="nCamID">相机ID</param>
-        private bool __SelectDeviceAndShow(CCamerInfo cameral, ICameraInfo cameralInfo)
+        private bool __SelectDeviceAndShow(CCamerInfo camera, ICameraInfo cameralInfo)
         {
 
             bool b_sts = false;
-            cameral.m_objBasler.SetDeviceInfo(cameralInfo);
-            b_sts = cameral.m_objBasler.ConnectToDevice();
+            camera.m_objBasler.SetDeviceInfo(cameralInfo);           b_sts = camera.m_objBasler.ConnectToDevice();
             if (b_sts == false) return false;
 
-            cameral.m_objImageShowFrom.TitleText = cameral.m_strDisplayName;
-            cameral.m_objImageShowFrom.ImageHeight = cameral.m_objBasler.GetCameralImageHeight();
-            cameral.m_objImageShowFrom.ImageWidth = cameral.m_objBasler.GetCameralImageWidth();
+            camera.m_objImageShowFrom.TitleText = camera.m_strDisplayName;
+            camera.m_objImageShowFrom.ImageHeight = camera.m_objBasler.GetCameralImageHeight();
+            camera.m_objImageShowFrom.ImageWidth = camera.m_objBasler.GetCameralImageWidth();
 
-            cameral.m_objImageShowFrom.TopLevel = false;
-            cameral.m_objImageShowFrom.Parent = this.panel_image;
-            cameral.m_objImageShowFrom.StartPosition = FormStartPosition.Manual;
-            cameral.m_objImageShowFrom.Location = new Point(0, 0);
-            cameral.m_objImageShowFrom.Show();
+            camera.m_objImageShowFrom.TopLevel = false;
+            camera.m_objImageShowFrom.Parent = this.panel_image;
+            camera.m_objImageShowFrom.StartPosition = FormStartPosition.Manual;
+            camera.m_objImageShowFrom.Location = new Point(0, 0);
+            camera.m_objImageShowFrom.Show();
 
 
             return b_sts;
@@ -297,21 +371,16 @@ namespace AutoTech
                 return;
             }
             m_objComPort.strComPortNumber = Properties.Settings.Default.PLC_ComNum;
-
             m_objComPort.iBaundRate = Properties.Settings.Default.PLC_BaudRate;
-
             m_objComPort.iDataBit = Properties.Settings.Default.PLC_DataBit;
-
             m_objComPort.iStopBit = Properties.Settings.Default.PLC_StopBit;
-
             m_objComPort.strParity = Properties.Settings.Default.PLC_Parity;
-
 
             m_objFixture = new clsFixture();
             m_objFixture.ComPort = m_objComPort;
             if (m_objFixture.InitFixture() == false)
             {
-                MessageBox.Show("设备初始化失败!!!");
+                MessageBox.Show("PLC 通信初始化失败!!!");
                 return;
             }
         }
@@ -350,6 +419,49 @@ namespace AutoTech
             frmConfig fmConfig = new frmConfig();
             fmConfig.Fixture = m_objFixture;
             fmConfig.ShowDialog();
+        }
+
+        private void radTreeView_Devices_SelectedNodeChanged(object sender, RadTreeViewEventArgs e)
+        {
+            RadTreeNode rootNodeSel;
+            rootNodeSel = e.Node.RootNode;
+
+            //get camera
+
+            foreach (CCamerInfo cmInfo in m_listCCamerInfo)
+            {
+                if (cmInfo.m_objCameraInfo[CameraInfoKey.FriendlyName] == rootNodeSel.Text)
+                {
+                    if (e.Node.Text == CCBasler.ConnectionType._Configuration)
+                    {
+                        cmInfo.m_objBasler.SetParameter(ref this.trackbar_gain, ref this.trackbar_exposure,ref trackbar_width,ref trackbar_height);
+                    }
+                }
+            }
+        }
+
+
+        private void radMenuItem_SaveImage_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFrom = new SaveFileDialog();
+            saveFrom.Filter = "BMP(*.bmp)|*.bmp|PNG(*.png)|*.png|JPEG(*.jpeg)|*.jpeg|所有文件(*.*)|*.*";
+
+            if (saveFrom.ShowDialog() == DialogResult.OK)
+            {
+                RadTreeNode rootNodeSel;
+                rootNodeSel = radTreeView_Devices.SelectedNode.Parent;
+                if (rootNodeSel == null) rootNodeSel = radTreeView_Devices.SelectedNode;
+
+                //get cameral 
+
+                foreach (CCamerInfo cmInfo in m_listCCamerInfo)
+                {
+                    if (cmInfo.m_objCameraInfo[CameraInfoKey.FriendlyName] == rootNodeSel.Text)
+                    {
+                        cmInfo.m_objImageShowFrom.PbxShowImage.Image.Save(saveFrom.FileName);
+                    }
+                }
+            }
         }
     }
 }

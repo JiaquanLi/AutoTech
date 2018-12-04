@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Basler.Pylon;
+using APS168_W32;
 namespace AutoTech
 {
     public partial class frmShowImage : Form
@@ -114,6 +115,11 @@ namespace AutoTech
             y = (int)(m_PointSel.Y * 16.843 - 9793.96);
 
             m_objFixture.MoveToPostion(clsFixture.en_Postion._PostionXY, x,y );
+        }
+
+        private void MoveTheRealPoint()
+        {
+
         }
 
     }

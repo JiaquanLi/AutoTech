@@ -17,5 +17,11 @@
     <Setting Name="PLC_Parity" Type="System.String" Scope="User">
       <Value Profile="(Default)">Even</Value>
     </Setting>
+    <Setting Name="Camera_GlobalSN" Type="System.String" Scope="User">
+      <Value Profile="(Default)">22546306</Value>
+    </Setting>
+    <Setting Name="Camera_LocalSN" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

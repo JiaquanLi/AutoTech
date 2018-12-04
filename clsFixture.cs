@@ -152,15 +152,12 @@ namespace AutoTech
                     try
                     {
                         writeResultRender(melsecSerial.Write(st_AddressX._LocSet, (int)xPostion), st_AddressX._LocSet);
-                        System.Threading.Thread.Sleep(100);
                         writeResultRender(melsecSerial.Write(st_AddressY._LocSet, (int)yPostion), st_AddressY._LocSet);
-                        System.Threading.Thread.Sleep(100);
+                        System.Threading.Thread.Sleep(200);
                         writeResultRender(melsecSerial.Write(st_AddressX._EnLocMove, true), st_AddressX._Home);
-                        System.Threading.Thread.Sleep(100);
                         writeResultRender(melsecSerial.Write(st_AddressY._EnLocMove, true), st_AddressY._Home);
-                        System.Threading.Thread.Sleep(500);
+                        System.Threading.Thread.Sleep(200);
                         writeResultRender(melsecSerial.Write(st_AddressX._EnLocMove, false), st_AddressX._Home);
-                        System.Threading.Thread.Sleep(100);
                         writeResultRender(melsecSerial.Write(st_AddressY._EnLocMove, false), st_AddressY._Home);
                     }
                     catch (Exception ex)
@@ -175,7 +172,7 @@ namespace AutoTech
                         writeResultRender(melsecSerial.Write(st_AddressX._LocSet, xPostion), st_AddressX._LocSet);
                         System.Threading.Thread.Sleep(100);
                         writeResultRender(melsecSerial.Write(st_AddressX._EnLocMove, true), st_AddressX._EnLocMove);
-                        System.Threading.Thread.Sleep(500);
+                        System.Threading.Thread.Sleep(200);
                         writeResultRender(melsecSerial.Write(st_AddressX._EnLocMove, false), st_AddressX._EnLocMove);
                     }
                     catch (Exception ex)
@@ -190,7 +187,7 @@ namespace AutoTech
                         writeResultRender(melsecSerial.Write(st_AddressY._LocSet, yPostion), st_AddressY._LocSet);
                         System.Threading.Thread.Sleep(100);
                         writeResultRender(melsecSerial.Write(st_AddressY._EnLocMove, true), st_AddressY._EnLocMove);
-                        System.Threading.Thread.Sleep(500);
+                        System.Threading.Thread.Sleep(200);
                         writeResultRender(melsecSerial.Write(st_AddressY._EnLocMove, false), st_AddressY._EnLocMove);
                     }
                     catch (Exception ex)
@@ -215,13 +212,13 @@ namespace AutoTech
             if (result.IsSuccess)
             {
                 //MessageBox.Show(DateTime.Now.ToString("[HH:mm:ss] ") + $"[{address}] 写入成功");
+                
             }
             else
             {
                 //MessageBox.Show(DateTime.Now.ToString("[HH:mm:ss] ") + $"[{address}] 写入失败{Environment.NewLine}原因：{result.ToMessageShowString()}");
             }
         }
-
 
     }
 }

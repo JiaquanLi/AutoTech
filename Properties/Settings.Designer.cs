@@ -82,5 +82,29 @@ namespace AutoTech.Properties {
                 this["PLC_Parity"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("22546306")]
+        public string Camera_GlobalSN {
+            get {
+                return ((string)(this["Camera_GlobalSN"]));
+            }
+            set {
+                this["Camera_GlobalSN"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Camera_LocalSN {
+            get {
+                return ((string)(this["Camera_LocalSN"]));
+            }
+            set {
+                this["Camera_LocalSN"] = value;
+            }
+        }
     }
 }

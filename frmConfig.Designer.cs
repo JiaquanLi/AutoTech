@@ -42,8 +42,6 @@
             this.label26 = new System.Windows.Forms.Label();
             this.tb_ComNum = new System.Windows.Forms.TextBox();
             this.label27 = new System.Windows.Forms.Label();
-            this.btn_CloseCom = new System.Windows.Forms.Button();
-            this.btn_OpenCom = new System.Windows.Forms.Button();
             this.gb_Y = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.btn_MoveHomeY = new System.Windows.Forms.Button();
@@ -73,6 +71,13 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.tb_GlobalCamera = new System.Windows.Forms.TextBox();
+            this.tb_LocalCamera = new System.Windows.Forms.TextBox();
+            this.btn_Exit = new Telerik.WinControls.UI.RadButton();
+            this.btn_Save = new Telerik.WinControls.UI.RadButton();
             this.tabControl1.SuspendLayout();
             this.tab_Plc.SuspendLayout();
             this.groupBox9.SuspendLayout();
@@ -85,6 +90,10 @@
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.btn_Exit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btn_Save)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -95,7 +104,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(805, 468);
+            this.tabControl1.Size = new System.Drawing.Size(805, 459);
             this.tabControl1.TabIndex = 0;
             // 
             // tab_Plc
@@ -107,7 +116,7 @@
             this.tab_Plc.Location = new System.Drawing.Point(4, 22);
             this.tab_Plc.Name = "tab_Plc";
             this.tab_Plc.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_Plc.Size = new System.Drawing.Size(797, 442);
+            this.tab_Plc.Size = new System.Drawing.Size(797, 433);
             this.tab_Plc.TabIndex = 0;
             this.tab_Plc.Text = "电机参数";
             // 
@@ -136,8 +145,6 @@
             this.panel1.Controls.Add(this.label26);
             this.panel1.Controls.Add(this.tb_ComNum);
             this.panel1.Controls.Add(this.label27);
-            this.panel1.Controls.Add(this.btn_CloseCom);
-            this.panel1.Controls.Add(this.btn_OpenCom);
             this.panel1.Location = new System.Drawing.Point(28, 18);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
@@ -152,7 +159,7 @@
             "None",
             "Odd",
             "Even"});
-            this.cb_Parity.Location = new System.Drawing.Point(463, 14);
+            this.cb_Parity.Location = new System.Drawing.Point(621, 14);
             this.cb_Parity.Name = "cb_Parity";
             this.cb_Parity.Size = new System.Drawing.Size(49, 20);
             this.cb_Parity.TabIndex = 25;
@@ -160,7 +167,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(411, 17);
+            this.label7.Location = new System.Drawing.Point(569, 17);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(46, 13);
             this.label7.TabIndex = 24;
@@ -168,7 +175,7 @@
             // 
             // tb_StopBit
             // 
-            this.tb_StopBit.Location = new System.Drawing.Point(376, 14);
+            this.tb_StopBit.Location = new System.Drawing.Point(498, 14);
             this.tb_StopBit.Name = "tb_StopBit";
             this.tb_StopBit.Size = new System.Drawing.Size(23, 21);
             this.tb_StopBit.TabIndex = 23;
@@ -177,7 +184,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(322, 17);
+            this.label8.Location = new System.Drawing.Point(446, 17);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(59, 13);
             this.label8.TabIndex = 22;
@@ -185,7 +192,7 @@
             // 
             // tb_Databit
             // 
-            this.tb_Databit.Location = new System.Drawing.Point(298, 14);
+            this.tb_Databit.Location = new System.Drawing.Point(385, 14);
             this.tb_Databit.Name = "tb_Databit";
             this.tb_Databit.Size = new System.Drawing.Size(24, 21);
             this.tb_Databit.TabIndex = 21;
@@ -194,7 +201,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(244, 17);
+            this.label25.Location = new System.Drawing.Point(331, 17);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(59, 13);
             this.label25.TabIndex = 20;
@@ -202,7 +209,7 @@
             // 
             // tb_Baud
             // 
-            this.tb_Baud.Location = new System.Drawing.Point(191, 14);
+            this.tb_Baud.Location = new System.Drawing.Point(235, 14);
             this.tb_Baud.Name = "tb_Baud";
             this.tb_Baud.Size = new System.Drawing.Size(47, 21);
             this.tb_Baud.TabIndex = 19;
@@ -211,7 +218,7 @@
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(137, 17);
+            this.label26.Location = new System.Drawing.Point(181, 17);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(59, 13);
             this.label26.TabIndex = 18;
@@ -219,7 +226,7 @@
             // 
             // tb_ComNum
             // 
-            this.tb_ComNum.Location = new System.Drawing.Point(62, 14);
+            this.tb_ComNum.Location = new System.Drawing.Point(48, 14);
             this.tb_ComNum.Name = "tb_ComNum";
             this.tb_ComNum.Size = new System.Drawing.Size(67, 21);
             this.tb_ComNum.TabIndex = 17;
@@ -234,32 +241,12 @@
             this.label27.TabIndex = 16;
             this.label27.Text = "串口：";
             // 
-            // btn_CloseCom
-            // 
-            this.btn_CloseCom.Enabled = false;
-            this.btn_CloseCom.Location = new System.Drawing.Point(611, 11);
-            this.btn_CloseCom.Name = "btn_CloseCom";
-            this.btn_CloseCom.Size = new System.Drawing.Size(70, 28);
-            this.btn_CloseCom.TabIndex = 5;
-            this.btn_CloseCom.Text = "关闭串口";
-            this.btn_CloseCom.UseVisualStyleBackColor = true;
-            // 
-            // btn_OpenCom
-            // 
-            this.btn_OpenCom.Location = new System.Drawing.Point(526, 11);
-            this.btn_OpenCom.Name = "btn_OpenCom";
-            this.btn_OpenCom.Size = new System.Drawing.Size(75, 28);
-            this.btn_OpenCom.TabIndex = 4;
-            this.btn_OpenCom.Text = "打开串口";
-            this.btn_OpenCom.UseVisualStyleBackColor = true;
-            this.btn_OpenCom.Click += new System.EventHandler(this.btb_OpenCom_Click);
-            // 
             // gb_Y
             // 
             this.gb_Y.Controls.Add(this.groupBox6);
             this.gb_Y.Controls.Add(this.groupBox7);
             this.gb_Y.Controls.Add(this.groupBox8);
-            this.gb_Y.Location = new System.Drawing.Point(16, 268);
+            this.gb_Y.Location = new System.Drawing.Point(16, 260);
             this.gb_Y.Name = "gb_Y";
             this.gb_Y.Size = new System.Drawing.Size(762, 161);
             this.gb_Y.TabIndex = 1;
@@ -533,19 +520,85 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.tabPage2.Controls.Add(this.groupBox2);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(797, 442);
+            this.tabPage2.Size = new System.Drawing.Size(797, 433);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "相机参数";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.tb_LocalCamera);
+            this.groupBox2.Controls.Add(this.tb_GlobalCamera);
+            this.groupBox2.Controls.Add(this.label10);
+            this.groupBox2.Controls.Add(this.label9);
+            this.groupBox2.Location = new System.Drawing.Point(15, 26);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(320, 206);
+            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "相机选择";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(19, 50);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(98, 13);
+            this.label9.TabIndex = 0;
+            this.label9.Text = "全局视野相机：";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(19, 107);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(98, 13);
+            this.label10.TabIndex = 0;
+            this.label10.Text = "局部视野相机：";
+            // 
+            // tb_GlobalCamera
+            // 
+            this.tb_GlobalCamera.Location = new System.Drawing.Point(123, 47);
+            this.tb_GlobalCamera.Name = "tb_GlobalCamera";
+            this.tb_GlobalCamera.Size = new System.Drawing.Size(124, 21);
+            this.tb_GlobalCamera.TabIndex = 1;
+            // 
+            // tb_LocalCamera
+            // 
+            this.tb_LocalCamera.Location = new System.Drawing.Point(123, 104);
+            this.tb_LocalCamera.Name = "tb_LocalCamera";
+            this.tb_LocalCamera.Size = new System.Drawing.Size(124, 21);
+            this.tb_LocalCamera.TabIndex = 1;
+            // 
+            // btn_Exit
+            // 
+            this.btn_Exit.Location = new System.Drawing.Point(698, 465);
+            this.btn_Exit.Name = "btn_Exit";
+            this.btn_Exit.Size = new System.Drawing.Size(82, 30);
+            this.btn_Exit.TabIndex = 2;
+            this.btn_Exit.Text = "退出";
+            this.btn_Exit.Click += new System.EventHandler(this.btn_Exit_Click);
+            // 
+            // btn_Save
+            // 
+            this.btn_Save.Location = new System.Drawing.Point(608, 465);
+            this.btn_Save.Name = "btn_Save";
+            this.btn_Save.Size = new System.Drawing.Size(82, 30);
+            this.btn_Save.TabIndex = 2;
+            this.btn_Save.Text = "保存";
+            this.btn_Save.Click += new System.EventHandler(this.btn_Save_Click);
             // 
             // frmConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(829, 497);
+            this.Controls.Add(this.btn_Exit);
+            this.Controls.Add(this.btn_Save);
             this.Controls.Add(this.tabControl1);
             this.Name = "frmConfig";
             // 
@@ -571,6 +624,11 @@
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.btn_Exit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btn_Save)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
@@ -592,8 +650,6 @@
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.TextBox tb_ComNum;
         private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Button btn_CloseCom;
-        private System.Windows.Forms.Button btn_OpenCom;
         private System.Windows.Forms.GroupBox gb_Y;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.Button btn_MoveHomeY;
@@ -623,5 +679,12 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox tb_LocalCamera;
+        private System.Windows.Forms.TextBox tb_GlobalCamera;
+        private Telerik.WinControls.UI.RadButton btn_Save;
+        private Telerik.WinControls.UI.RadButton btn_Exit;
     }
 }
