@@ -18,10 +18,13 @@
       <Value Profile="(Default)">Even</Value>
     </Setting>
     <Setting Name="Camera_GlobalSN" Type="System.String" Scope="User">
-      <Value Profile="(Default)">22546306</Value>
+      <Value Profile="(Default)">22546294</Value>
     </Setting>
     <Setting Name="Camera_LocalSN" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">22546306</Value>
+    </Setting>
+    <Setting Name="Camera_LocalExp" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100000</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -13,6 +13,7 @@ namespace AutoTech
     public partial class frmConfig : Telerik.WinControls.UI.RadForm
     {
         private clsFixture m_objFixture = null;
+        private clsFixtureAMP204 m_objFixtureAMP204 = null;
         //clsFixture.stComPort m_objComPort = new clsFixture.stComPort();
 
         public clsFixture Fixture
@@ -20,6 +21,14 @@ namespace AutoTech
             set
             {
                 this.m_objFixture = value;
+            }
+        }
+
+        public clsFixtureAMP204 FixtureAMP204
+        {
+            set
+            {
+                this.m_objFixtureAMP204 = value;
             }
         }
 
@@ -87,7 +96,8 @@ namespace AutoTech
 
         private void btn_MoveHomeX_Click(object sender, EventArgs e)
         {
-            m_objFixture.MoveToPostion(clsFixture.en_Postion._HomeX);
+            //m_objFixture.MoveToPostion(clsFixture.en_Postion._HomeX);
+            m_objFixtureAMP204.HomeXY();
         }
 
         private void btn_MovePosX_Click(object sender, EventArgs e)
@@ -98,7 +108,8 @@ namespace AutoTech
                 return;
             }
 
-            m_objFixture.MoveToPostion(clsFixture.en_Postion._PostionX, (int)posX);
+            //m_objFixture.MoveToPostion(clsFixture.en_Postion._PostionX, (int)posX);
+            m_objFixtureAMP204.MoveAbs(posX, posX);
         }
 
         private void btn_MovePosY_Click(object sender, EventArgs e)

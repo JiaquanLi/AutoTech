@@ -53,6 +53,7 @@ namespace AutoTech
             public const string _LocMoveSpeed = "D126";
             public const string _CurLoc       = "D220";
         }
+
         private MelsecFxSerial melsecSerial = null;
         private stComPort m_objComPort ;
 

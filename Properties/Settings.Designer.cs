@@ -85,7 +85,7 @@ namespace AutoTech.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("22546306")]
+        [global::System.Configuration.DefaultSettingValueAttribute("22546294")]
         public string Camera_GlobalSN {
             get {
                 return ((string)(this["Camera_GlobalSN"]));
@@ -97,13 +97,25 @@ namespace AutoTech.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("22546306")]
         public string Camera_LocalSN {
             get {
                 return ((string)(this["Camera_LocalSN"]));
             }
             set {
                 this["Camera_LocalSN"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100000")]
+        public int Camera_LocalExp {
+            get {
+                return ((int)(this["Camera_LocalExp"]));
+            }
+            set {
+                this["Camera_LocalExp"] = value;
             }
         }
     }

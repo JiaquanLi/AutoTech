@@ -94,9 +94,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APS168.cs" />
+    <Compile Include="APS_Define.cs" />
     <Compile Include="CDeviceStateInfo.cs" />
     <Compile Include="clsBasler.cs" />
     <Compile Include="clsFixture.cs" />
+    <Compile Include="clsFixtureAMP204.cs" />
     <Compile Include="FloatSliderUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

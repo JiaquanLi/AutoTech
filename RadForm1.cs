@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Basler.Pylon;
 using GxMultiCam;
 using Telerik.WinControls.UI;
+
  
 
 namespace AutoTech
@@ -20,7 +21,20 @@ namespace AutoTech
         List<CCamerInfo> m_listCCamerInfo = new List<CCamerInfo>();           ///相机参数状态列表
         List<ICameraInfo> m_listallCameras = new List<ICameraInfo>();
         private clsFixture m_objFixture = null;
+        private clsFixtureAMP204 m_objFixtureAMP204;
+        private CCBasler m_objCameraLocl;
+        private System.Windows.Forms.PictureBox pbxLocal;
         clsFixture.stComPort m_objComPort;
+
+        struct Line
+        {
+            public Point start;
+            public Point end;
+        }
+
+        private List<Line> lstLines = new List<Line>();
+        private Line m_Line;
+
 
         public RadForm1()
         {
@@ -35,8 +49,10 @@ namespace AutoTech
 
         private void RadForm1_Load(object sender, EventArgs e)
         {
+            
             InitialHal();
             UpdateDeviceTree();
+            InitListLines();
 
         }
 
@@ -213,7 +229,7 @@ namespace AutoTech
                     bool newitem = true;
                     foreach (RadTreeNode radTreeNode in this.radTreeView_Devices.Nodes)
                     {
-                        if(radTreeNode.Name == cameraInfo[CameraInfoKey.FriendlyName])
+                        if(radTreeNode.Name == cameraInfo[CameraInfoKey.FriendlyName] || cameraInfo[CameraInfoKey.FriendlyName].Contains("22546306"))
                         {
                             newitem = false;
                             break;
@@ -252,6 +268,8 @@ namespace AutoTech
                         CCamerInfo objCCamerInfo = new CCamerInfo();
                         frmShowImage objImageShowFrom = new frmShowImage();
                         objImageShowFrom.Fixture = m_objFixture;
+                        objImageShowFrom.Fixtureapm204 = m_objFixtureAMP204;
+                        objImageShowFrom.BaslerLocalCamera = m_objCameraLocl;
                         objCCamerInfo.m_objImageShowFrom = objImageShowFrom;
 
                         System.Windows.Forms.PictureBox pbx = objImageShowFrom.PbxShowImage;
@@ -362,6 +380,16 @@ namespace AutoTech
 
         }
 
+        private void InitListLines()
+        {
+
+            this.lstBox_Lines.Columns.Add("",20,HorizontalAlignment.Left);
+            this.lstBox_Lines.Columns.Add("起点", 130, HorizontalAlignment.Left);
+            this.lstBox_Lines.Columns.Add("终点", 130, HorizontalAlignment.Left);
+
+            this.lstBox_Lines.View = View.Details;
+            this.lstBox_Lines.GridLines = true;
+        }
         private void InitialHal()
         {
             m_objComPort = new clsFixture.stComPort();
@@ -375,6 +403,44 @@ namespace AutoTech
             m_objComPort.iDataBit = Properties.Settings.Default.PLC_DataBit;
             m_objComPort.iStopBit = Properties.Settings.Default.PLC_StopBit;
             m_objComPort.strParity = Properties.Settings.Default.PLC_Parity;
+
+            m_objFixtureAMP204 = new clsFixtureAMP204();
+            if (m_objFixtureAMP204.InitialFixture(0, 0) == false)
+            {
+                MessageBox.Show("APM 204 card initial fail 通信初始化失败!!!");
+                return;
+            }
+
+            m_objFixtureAMP204.ServoOn(true);
+            m_objFixtureAMP204.HomeXY();
+
+            //frmShowImage objImageShowFromLocal = new frmShowImage();
+            //pbxLocal = objImageShowFromLocal.PbxShowImage;
+            m_objCameraLocl = new CCBasler();
+            
+
+            List<ICameraInfo> listCam = CCBasler.GetDeviceList();
+
+            bool findLocalCam = false;
+            foreach (ICameraInfo cam in listCam)
+            {
+
+                if (cam[CameraInfoKey.FriendlyName].Contains(Properties.Settings.Default.Camera_LocalSN))
+                {
+                    findLocalCam = true;
+                    m_objCameraLocl.SetDeviceInfo(cam);
+                    m_objCameraLocl.ConnectToDevice();
+                    m_objCameraLocl.SetExposure(Properties.Settings.Default.Camera_LocalExp);
+
+                    break;
+                }
+            }
+
+            if (findLocalCam == false)
+            {
+                MessageBox.Show("局部相机 通信初始化失败!!!");
+                return;
+            }
 
             m_objFixture = new clsFixture();
             m_objFixture.ComPort = m_objComPort;
@@ -418,6 +484,7 @@ namespace AutoTech
         {
             frmConfig fmConfig = new frmConfig();
             fmConfig.Fixture = m_objFixture;
+            fmConfig.FixtureAMP204 = m_objFixtureAMP204;
             fmConfig.ShowDialog();
         }
 
@@ -443,24 +510,89 @@ namespace AutoTech
 
         private void radMenuItem_SaveImage_Click(object sender, EventArgs e)
         {
+            m_objCameraLocl.bSaveImgae = true;
+            m_objCameraLocl.OneShot();
+            return;
             SaveFileDialog saveFrom = new SaveFileDialog();
             saveFrom.Filter = "BMP(*.bmp)|*.bmp|PNG(*.png)|*.png|JPEG(*.jpeg)|*.jpeg|所有文件(*.*)|*.*";
 
             if (saveFrom.ShowDialog() == DialogResult.OK)
+            {              
+                m_objCameraLocl.bSaveImgae = true;
+                m_objCameraLocl.OneShot();
+
+                ////get cameral 
+
+                //foreach (CCamerInfo cmInfo in m_listCCamerInfo)
+                //{
+                //    if (cmInfo.m_objCameraInfo[CameraInfoKey.FriendlyName] == rootNodeSel.Text)
+                //    {
+                //        cmInfo.m_objImageShowFrom.PbxShowImage.Image.Save(saveFrom.FileName);
+                //    }
+                //}
+            }
+        }
+
+        private void btn_PointStart_Click(object sender, EventArgs e)
+        {
+            double curXpos = 0;
+            double curYpos = 0;
+            m_Line = new Line();
+
+            m_objFixtureAMP204.GetPostionAbs(ref curXpos, ref curYpos);
+
+            m_Line.start.X =(int) curXpos;
+            m_Line.start.Y = (int)curYpos;
+            //ListViewItem lstItem = new ListViewItem();
+            //lstItem.Text = this.lstBox_Lines.Columns.Count.ToString();
+            //lstItem.SubItems.Add(curXpos.ToString() + "," + curYpos.ToString());
+            //lstBox_Lines.Items.Add(lstItem);
+        }
+
+        private void btn_PointEnd_Click(object sender, EventArgs e)
+        {
+            double curXpos = 0;
+            double curYpos = 0;
+
+            m_objFixtureAMP204.GetPostionAbs(ref curXpos, ref curYpos);
+
+            m_Line.end.X = (int)curXpos;
+            m_Line.end.Y = (int)curYpos;
+        }
+
+        private void btn_SaveLine_Click(object sender, EventArgs e)
+        {
+
+            if(m_Line.start.X == -1 || m_Line.start.Y == -1 || m_Line.end.X == -1 || m_Line.end.Y == -1)
             {
-                RadTreeNode rootNodeSel;
-                rootNodeSel = radTreeView_Devices.SelectedNode.Parent;
-                if (rootNodeSel == null) rootNodeSel = radTreeView_Devices.SelectedNode;
+                MessageBox.Show("请添加直线");
+                return;
+            }
+            ListViewItem lstItem = new ListViewItem();
+            lstItem.Text = (lstLines.Count +1).ToString();
+            lstItem.SubItems.Add(m_Line.start.X.ToString() + "," + m_Line.start.Y.ToString());
+            lstItem.SubItems.Add(m_Line.end.X.ToString() + "," + m_Line.end.Y.ToString());
+            lstBox_Lines.Items.Add(lstItem);
 
-                //get cameral 
+            lstLines.Add(m_Line);
 
-                foreach (CCamerInfo cmInfo in m_listCCamerInfo)
-                {
-                    if (cmInfo.m_objCameraInfo[CameraInfoKey.FriendlyName] == rootNodeSel.Text)
-                    {
-                        cmInfo.m_objImageShowFrom.PbxShowImage.Image.Save(saveFrom.FileName);
-                    }
-                }
+            MessageBox.Show("添加成功");
+
+            m_Line.start.X = -1;
+            m_Line.start.Y = -1;
+            m_Line.end.X = -1;
+            m_Line.end.Y = -1;
+
+        }
+
+        private void btn_RunLins_Click(object sender, EventArgs e)
+        {
+            foreach(Line line in lstLines)
+            {
+                m_objFixtureAMP204.MovePT_Line(line.start.X, line.start.Y);
+                m_objFixtureAMP204.MovePT_Line(line.end.X, line.end.Y);
+
+                System.Threading.Thread.Sleep(1000);
             }
         }
     }

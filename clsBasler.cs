@@ -13,13 +13,14 @@ namespace AutoTech
     public class CCBasler
     {
 
-        private System.Windows.Forms.PictureBox pbx_Image;
+        private System.Windows.Forms.PictureBox pbx_Image = null;
         private Camera objCamera = null;
         private ICameraInfo objICameraInfo;
 
 
         private PixelDataConverter converter = new PixelDataConverter();
         private Stopwatch stopWatch = new Stopwatch();
+        public bool bSaveImgae = false;
 
         public struct ConnectionType
         {
@@ -45,6 +46,9 @@ namespace AutoTech
         public CCBasler(ref System.Windows.Forms.PictureBox pbxImage)
         {
             this.pbx_Image = pbxImage;
+        }
+        public CCBasler()
+        {
         }
 
         ~CCBasler()
@@ -186,11 +190,18 @@ namespace AutoTech
         //
         private void OnConnectionLost(Object sender, EventArgs e)
         {
-            if (pbx_Image.InvokeRequired)
+            if (pbx_Image == null)
             {
-                // If called from a different thread, we must use the Invoke method to marshal the call to the proper thread.
-                pbx_Image.BeginInvoke(new EventHandler<EventArgs>(OnConnectionLost), sender, e);
-                return;
+
+            }
+            else
+            {
+                if (pbx_Image.InvokeRequired)
+                {
+                    // If called from a different thread, we must use the Invoke method to marshal the call to the proper thread.
+                    pbx_Image.BeginInvoke(new EventHandler<EventArgs>(OnConnectionLost), sender, e);
+                    return;
+                }
             }
 
             // Close the camera object.
@@ -203,11 +214,18 @@ namespace AutoTech
         // Occurs when the connection to a camera device is opened.
         private void OnCameraOpened(Object sender, EventArgs e)
         {
-            if (pbx_Image.InvokeRequired)
+            if (pbx_Image == null)
             {
-                // If called from a different thread, we must use the Invoke method to marshal the call to the proper thread.
-                pbx_Image.BeginInvoke(new EventHandler<EventArgs>(OnCameraOpened), sender, e);
-                return;
+
+            }
+            else
+            {
+                if (pbx_Image.InvokeRequired)
+                {
+                    // If called from a different thread, we must use the Invoke method to marshal the call to the proper thread.
+                    pbx_Image.BeginInvoke(new EventHandler<EventArgs>(OnCameraOpened), sender, e);
+                    return;
+                }
             }
 
         }
@@ -216,11 +234,18 @@ namespace AutoTech
         // Occurs when the connection to a camera device is closed.
         private void OnCameraClosed(Object sender, EventArgs e)
         {
-            if (pbx_Image.InvokeRequired)
+            if (pbx_Image == null)
             {
-                // If called from a different thread, we must use the Invoke method to marshal the call to the proper thread.
-                pbx_Image.BeginInvoke(new EventHandler<EventArgs>(OnCameraClosed), sender, e);
-                return;
+
+            }
+            else
+            {
+                if (pbx_Image.InvokeRequired)
+                {
+                    // If called from a different thread, we must use the Invoke method to marshal the call to the proper thread.
+                    pbx_Image.BeginInvoke(new EventHandler<EventArgs>(OnCameraClosed), sender, e);
+                    return;
+                }
             }
 
         }
@@ -229,11 +254,18 @@ namespace AutoTech
         // Occurs when a camera starts grabbing.
         private void OnGrabStarted(Object sender, EventArgs e)
         {
-            if (pbx_Image.InvokeRequired)
+            if (pbx_Image == null)
             {
-                // If called from a different thread, we must use the Invoke method to marshal the call to the proper thread.
-                pbx_Image.BeginInvoke(new EventHandler<EventArgs>(OnGrabStarted), sender, e);
-                return;
+
+            }
+            else
+            {
+                if (pbx_Image.InvokeRequired)
+                {
+                    // If called from a different thread, we must use the Invoke method to marshal the call to the proper thread.
+                    pbx_Image.BeginInvoke(new EventHandler<EventArgs>(OnGrabStarted), sender, e);
+                    return;
+                }
             }
 
             // Reset the stopwatch used to reduce the amount of displayed images. The camera may acquire images faster than the images can be displayed.
@@ -245,12 +277,19 @@ namespace AutoTech
         // Occurs when an image has been acquired and is ready to be processed.
         private void OnImageGrabbed(Object sender, ImageGrabbedEventArgs e)
         {
-            if (pbx_Image.InvokeRequired)
+            if (pbx_Image == null)
             {
-                // If called from a different thread, we must use the Invoke method to marshal the call to the proper GUI thread.
-                // The grab result will be disposed after the event call. Clone the event arguments for marshaling to the GUI thread.
-                pbx_Image.BeginInvoke(new EventHandler<ImageGrabbedEventArgs>(OnImageGrabbed), sender, e.Clone());
-                return;
+
+            }
+            else
+            {
+                if (pbx_Image.InvokeRequired)
+                {
+                    // If called from a different thread, we must use the Invoke method to marshal the call to the proper GUI thread.
+                    // The grab result will be disposed after the event call. Clone the event arguments for marshaling to the GUI thread.
+                    pbx_Image.BeginInvoke(new EventHandler<ImageGrabbedEventArgs>(OnImageGrabbed), sender, e.Clone());
+                    return;
+                }
             }
 
             try
@@ -278,9 +317,15 @@ namespace AutoTech
                         bitmap.UnlockBits(bmpData);
 
                         // Assign a temporary variable to dispose the bitmap after assigning the new bitmap to the display control.
-                        Bitmap bitmapOld = pbx_Image.Image as Bitmap;
+                        Bitmap bitmapOld = null;
                         // Provide the display control with the new bitmap. This action automatically updates the display.
-                        pbx_Image.Image = bitmap;
+                        if (pbx_Image != null)
+                        {
+                            bitmapOld = pbx_Image.Image as Bitmap;
+                            pbx_Image.Image = bitmap;
+                        }
+                        if (bSaveImgae)
+                               bitmap.Save(@"D:\MATPRO\image.bmp");
                         if (bitmapOld != null)
                         {
                             // Dispose the bitmap.
@@ -304,11 +349,18 @@ namespace AutoTech
         // Occurs when a camera has stopped grabbing.
         private void OnGrabStopped(Object sender, GrabStopEventArgs e)
         {
-            if (pbx_Image.InvokeRequired)
+            if (pbx_Image == null)
             {
-                // If called from a different thread, we must use the Invoke method to marshal the call to the proper thread.
-                pbx_Image.BeginInvoke(new EventHandler<GrabStopEventArgs>(OnGrabStopped), sender, e);
-                return;
+
+            }
+            else
+            {
+                if (pbx_Image.InvokeRequired)
+                {
+                    // If called from a different thread, we must use the Invoke method to marshal the call to the proper thread.
+                    pbx_Image.BeginInvoke(new EventHandler<GrabStopEventArgs>(OnGrabStopped), sender, e);
+                    return;
+                }
             }
 
             // Reset the stopwatch.
@@ -349,6 +401,10 @@ namespace AutoTech
             }
         }
 
+        public void SetExposure(int exp)
+        {
+            objCamera.Parameters[PLCamera.ExposureTimeAbs].SetValue(exp);
+        }
         public void SetParameter(ref FloatSliderUserControl expControl, ref FloatSliderUserControl gainControl ,ref IntSliderUserControl widthControl ,ref IntSliderUserControl heighControl )
         {
             // Set the parameter for the controls.
