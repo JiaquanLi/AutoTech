@@ -118,5 +118,41 @@ namespace AutoTech.Properties {
                 this["Camera_LocalExp"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Card8338ID {
+            get {
+                return ((int)(this["Card8338ID"]));
+            }
+            set {
+                this["Card8338ID"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Card204 {
+            get {
+                return ((int)(this["Card204"]));
+            }
+            set {
+                this["Card204"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("300000")]
+        public int Camera_GlobalExp {
+            get {
+                return ((int)(this["Camera_GlobalExp"]));
+            }
+            set {
+                this["Camera_GlobalExp"] = value;
+            }
+        }
     }
 }

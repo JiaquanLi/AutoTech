@@ -26,5 +26,14 @@
     <Setting Name="Camera_LocalExp" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100000</Value>
     </Setting>
+    <Setting Name="Card8338ID" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Card204" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Camera_GlobalExp" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">300000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

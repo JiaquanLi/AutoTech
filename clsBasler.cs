@@ -405,35 +405,32 @@ namespace AutoTech
         {
             objCamera.Parameters[PLCamera.ExposureTimeAbs].SetValue(exp);
         }
-        public void SetParameter(ref FloatSliderUserControl expControl, ref FloatSliderUserControl gainControl ,ref IntSliderUserControl widthControl ,ref IntSliderUserControl heighControl )
-        {
-            // Set the parameter for the controls.
-            //testImageControl.Parameter = camera.Parameters[PLCamera.TestImageSelector];
-            //pixelFormatControl.Parameter = camera.Parameters[PLCamera.PixelFormat];
-            widthControl.Parameter = objCamera.Parameters[PLCamera.Width];
-            heighControl.Parameter = objCamera.Parameters[PLCamera.Height];
+        //public void SetParameter(ref FloatSliderUserControl expControl, ref FloatSliderUserControl gainControl ,ref IntSliderUserControl widthControl ,ref IntSliderUserControl heighControl )
+        //{
+        //    widthControl.Parameter = objCamera.Parameters[PLCamera.Width];
+        //    heighControl.Parameter = objCamera.Parameters[PLCamera.Height];
 
-            gainControl.DefaultName = "Gain";
-            expControl.DefaultName = "Exposure Time";
-            if (objCamera == null) return;
-            if (objCamera.Parameters.Contains(PLCamera.GainAbs))
-            {
-                gainControl.Parameter = objCamera.Parameters[PLCamera.GainAbs];
-            }
-            else
-            {
-                gainControl.Parameter = objCamera.Parameters[PLCamera.Gain];
-            }
-            if (objCamera.Parameters.Contains(PLCamera.ExposureTimeAbs))
-            {
-                expControl.Parameter = objCamera.Parameters[PLCamera.ExposureTimeAbs];
-            }
-            else
-            {
-                expControl.Parameter = objCamera.Parameters[PLCamera.ExposureTime];
-            }
+        //    gainControl.DefaultName = "Gain";
+        //    expControl.DefaultName = "Exposure Time";
+        //    if (objCamera == null) return;
+        //    if (objCamera.Parameters.Contains(PLCamera.GainAbs))
+        //    {
+        //        gainControl.Parameter = objCamera.Parameters[PLCamera.GainAbs];
+        //    }
+        //    else
+        //    {
+        //        gainControl.Parameter = objCamera.Parameters[PLCamera.Gain];
+        //    }
+        //    if (objCamera.Parameters.Contains(PLCamera.ExposureTimeAbs))
+        //    {
+        //        expControl.Parameter = objCamera.Parameters[PLCamera.ExposureTimeAbs];
+        //    }
+        //    else
+        //    {
+        //        expControl.Parameter = objCamera.Parameters[PLCamera.ExposureTime];
+        //    }
 
-        }
+        //}
 
         private void  ShowException(Exception exception)
         {

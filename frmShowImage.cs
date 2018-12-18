@@ -21,17 +21,18 @@ namespace AutoTech
         private double m_PointSelX;
         private double m_PointSelY;
 
-        private clsFixture m_objFixture;
-        private clsFixtureAMP204 m_objFixtureAPM204;
+        //private clsFixture m_objFixture;
+        //private clsFixtureAMP204 m_objFixtureAPM204;
+        private clsFixture8338 m_objFixture;
         private CCBasler m_objBaslerLocalCamera;
 
-        public clsFixture Fixture
-        {
-            set
-            {
-                m_objFixture = value;
-            }
-        }
+        //public clsFixture Fixture
+        //{
+        //    set
+        //    {
+        //        m_objFixture = value;
+        //    }
+        //}
 
         public CCBasler BaslerLocalCamera
         {
@@ -41,11 +42,19 @@ namespace AutoTech
             }
         }
 
-        public clsFixtureAMP204 Fixtureapm204
+        //public clsFixtureAMP204 Fixtureapm204
+        //{
+        //    set
+        //    {
+        //        m_objFixture = value;
+        //    }
+        //}
+
+        public clsFixture8338 Fixture
         {
             set
             {
-                m_objFixtureAPM204 = value;
+                m_objFixture = value;
             }
         }
 
@@ -132,24 +141,27 @@ namespace AutoTech
 
             if (dlgRes == DialogResult.No) return;
             //激光点标定
-            x =(int) (m_PointSelX * 17.4157303 -7326.4 + 400);
-            y = (int)(m_PointSelY * 16.9871795 -9024.36 -900);
-
+            // x =(int) (m_PointSelX * (51.744) - m_PointSelY*(105.08)+87296.7);
+            //y = (int)(m_PointSelX * (105.08) + m_PointSelY* (51.744) -46792.34);
+            x = (int)(-62.5 * m_PointSelX +130325.56);
+            y = (int)(149.0 * m_PointSelY +4342);
             //x = 17438;
             //y = 20771;
             ////相机相对平移
-            x -= 1500;
-            y -= 3500;
-            m_objFixtureAPM204.MovePT_Line(x, y);
+            //x -= 1500;
+            //y -= 3500;
+            m_objFixture.MovePT_Line(x, y);
             MoveTheRealPoint();
         }
 
         private void MoveTheRealPoint()
         {
-            double LaserX = 513;
-            double LaserY = 1577;
+            double LaserX = 1379;
+            double LaserY = 1274;
             string strTemp;
 
+            m_objFixture.SickLaserPowerOnOff(false);
+            System.Threading.Thread.Sleep(200);
             m_objBaslerLocalCamera.bSaveImgae = true;
             m_objBaslerLocalCamera.OneShot();
 
@@ -164,20 +176,26 @@ namespace AutoTech
             StreamReader sr = new StreamReader(@"D:\MATPRO\pointxy.txt");
             strTemp = sr.ReadLine();
             sr.Close();
-            string []arrXY = strTemp.Split(' ');
+            string[] arrXY = strTemp.Split(' ');
 
-             
-            double GetReadX = 478;
-            double GetReadY = 1335;
 
-            GetReadX =double.Parse( arrXY[1]);
+            double GetReadX = 2410;
+            double GetReadY = 1623;
+
+            GetReadX = double.Parse(arrXY[1]);
             GetReadY = double.Parse(arrXY[0]);
 
             double trasX, trasY;
 
-            trasX = (LaserY - GetReadY) * 3.427 + 50;
-            trasY = -(LaserX - GetReadX) * 3.636 - 100;
-            m_objFixtureAPM204.MoveRelative((int)trasX, (int)trasY);
+            //trasX = (LaserY - GetReadY) * (-11.066) + 41249;
+            //trasY = -(LaserX - GetReadX) * 25.3216 + 78253;
+
+            ///TEST
+            trasX = (LaserX - GetReadX) * (11.066) + 0;
+            trasY = -(LaserY - GetReadY) * 25.3216 + 0;
+
+            m_objFixture.SickLaserPowerOnOff(true);
+            m_objFixture.MoveRelative((int)trasX, (int)trasY);
 
         }
 

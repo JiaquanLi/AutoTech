@@ -339,5 +339,10 @@ namespace AutoTech
                 //MessageBox.Show("轴" + axisId + "回零失败！");
             }
         }
+
+        private void ReadAI()
+        {
+
+        }
     }
 }

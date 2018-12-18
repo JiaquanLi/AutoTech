@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<APS ver="1.1">
+  <board id="0">
+    <boardName>PCIe-8338</boardName>
+    <parameters>
+      <pa num="0x0" attr="0">1</pa>
+      <pa num="0x14" attr="0">0</pa>
+      <pa num="0x15" attr="0">0</pa>
+      <pa num="0x16" attr="0">0</pa>
+      <pa num="0x17" attr="0">0</pa>
+      <pa num="0x101" attr="0">0</pa>
+      <pa num="0x102" attr="0">3</pa>
+      <pa num="0x104" attr="0">1</pa>
+      <pa num="0x105" attr="0">1</pa>
+      <pa num="0x106" attr="0">0</pa>
+      <pa num="0x107" attr="0">0</pa>
+      <pa num="0x108" attr="0">0</pa>
+      <pa num="0x109" attr="0">1</pa>
+    </parameters>
+  </board>
+  <axis id="0">
+    <boardId>0</boardId>
+    <fieldBusId>0</fieldBusId>
+    <parameters>
+      <pa num="0x2" attr="0">0</pa>
+      <pa num="0x3" attr="0">0</pa>
+      <pa num="0x7" attr="0">100000000</pa>
+      <pa num="0x8" attr="0">0</pa>
+      <pa num="0x9" attr="0">0</pa>
+      <pa num="0xa" attr="0">100000</pa>
+      <pa num="0xb" attr="0">-100000</pa>
+      <pa num="0x10" attr="0">0</pa>
+      <pa num="0x11" attr="0">0</pa>
+      <pa num="0x18" attr="0">0</pa>
+      <pa num="0x1c" attr="0">10</pa>
+      <pa num="0x1d" attr="0">0</pa>
+      <pa num="0x40" attr="0">0</pa>
+      <pa num="0x41" attr="0">0</pa>
+      <pa num="0x47" attr="0">500000</pa>
+      <pa num="0x48" attr="0">0</pa>
+      <pa num="0x49" attr="0">0</pa>
+      <pa num="0x4a" attr="0">1</pa>
+      <pa num="0x4b" attr="0">2</pa>
+      <pa num="0x51" attr="0">0</pa>
+      <pa num="0x52" attr="0">0</pa>
+      <pa num="0x65" attr="0">2147483647</pa>
+      <pa num="0x66" attr="0">0</pa>
+      <pa num="0x160" attr="0">0</pa>
+      <pa num="0x161" attr="0">0</pa>
+      <pa num="0x162" attr="0">0</pa>
+      <pa num="0x170" attr="0">0</pa>
+    </parameters>
+    <parameters_f>
+      <pa num="0x12" attr="0">000000003fe00000</pa>
+      <pa num="0x13" attr="0">0000000040c38800</pa>
+      <pa num="0x14" attr="0">0000000000000000</pa>
+      <pa num="0x15" attr="0">00000000408f4000</pa>
+      <pa num="0x17" attr="0">0000000000000000</pa>
+      <pa num="0x19" attr="0">0000000040690000</pa>
+      <pa num="0x1b" attr="0">0000000000000000</pa>
+      <pa num="0x20" attr="0">0000000000000000</pa>
+      <pa num="0x21" attr="0">0000000040f86a00</pa>
+      <pa num="0x22" attr="0">0000000040f86a00</pa>
+      <pa num="0x23" attr="0">0000000000000000</pa>
+      <pa num="0x24" attr="0">00000000408f4000</pa>
+      <pa num="0x25" attr="0">0000000000000000</pa>
+      <pa num="0x2a" attr="0">0000000000000000</pa>
+      <pa num="0x2b" attr="0">0000000000000000</pa>
+      <pa num="0x42" attr="0">0000000000000000</pa>
+      <pa num="0x43" attr="0">00000000409f4000</pa>
+      <pa num="0x44" attr="0">00000000409f4000</pa>
+      <pa num="0x45" attr="0">00000000408f4000</pa>
+      <pa num="0x46" attr="0">00000000408f4000</pa>
+      <pa num="0x61" attr="0">00000000408f4000</pa>
+      <pa num="0x62" attr="0">000000003ff00000</pa>
+      <pa num="0x63" attr="0">0000000000000000</pa>
+      <pa num="0x64" attr="0">0000000000000000</pa>
+      <pa num="0x86" attr="0">000000003ff00000</pa>
+      <pa num="0x88" attr="0">000000003ff00000</pa>
+      <pa num="0x124" attr="0">0000000000000000</pa>
+      <pa num="0x129" attr="0">0000000000000000</pa>
+      <pa num="0x12a" attr="0">0000000000000000</pa>
+      <pa num="0x144" attr="0">0000000000000000</pa>
+      <pa num="0x163" attr="0">000000003ff00000</pa>
+      <pa num="0x168" attr="0">00000000412e8480</pa>
+      <pa num="0x169" attr="0">0000000041cdcd65</pa>
+    </parameters_f>
+  </axis>
+  <axis id="1">
+    <boardId>0</boardId>
+    <fieldBusId>0</fieldBusId>
+    <parameters>
+      <pa num="0x2" attr="0">0</pa>
+      <pa num="0x3" attr="0">0</pa>
+      <pa num="0x7" attr="0">100000000</pa>
+      <pa num="0x8" attr="0">0</pa>
+      <pa num="0x9" attr="0">0</pa>
+      <pa num="0xa" attr="0">100000</pa>
+      <pa num="0xb" attr="0">-100000</pa>
+      <pa num="0x10" attr="0">0</pa>
+      <pa num="0x11" attr="0">0</pa>
+      <pa num="0x18" attr="0">0</pa>
+      <pa num="0x1c" attr="0">10</pa>
+      <pa num="0x1d" attr="0">0</pa>
+      <pa num="0x40" attr="0">0</pa>
+      <pa num="0x41" attr="0">0</pa>
+      <pa num="0x47" attr="0">500000</pa>
+      <pa num="0x48" attr="0">0</pa>
+      <pa num="0x49" attr="0">0</pa>
+      <pa num="0x4a" attr="0">1</pa>
+      <pa num="0x4b" attr="0">2</pa>
+      <pa num="0x51" attr="0">0</pa>
+      <pa num="0x52" attr="0">0</pa>
+      <pa num="0x65" attr="0">2147483647</pa>
+      <pa num="0x66" attr="0">0</pa>
+      <pa num="0x160" attr="0">0</pa>
+      <pa num="0x161" attr="0">0</pa>
+      <pa num="0x162" attr="0">0</pa>
+      <pa num="0x170" attr="0">0</pa>
+    </parameters>
+    <parameters_f>
+      <pa num="0x12" attr="0">000000003fe00000</pa>
+      <pa num="0x13" attr="0">0000000040c38800</pa>
+      <pa num="0x14" attr="0">0000000000000000</pa>
+      <pa num="0x15" attr="0">00000000408f4000</pa>
+      <pa num="0x17" attr="0">0000000000000000</pa>
+      <pa num="0x19" attr="0">0000000040690000</pa>
+      <pa num="0x1b" attr="0">0000000000000000</pa>
+      <pa num="0x20" attr="0">0000000000000000</pa>
+      <pa num="0x21" attr="0">0000000040f86a00</pa>
+      <pa num="0x22" attr="0">0000000040f86a00</pa>
+      <pa num="0x23" attr="0">0000000000000000</pa>
+      <pa num="0x24" attr="0">00000000408f4000</pa>
+      <pa num="0x25" attr="0">0000000000000000</pa>
+      <pa num="0x2a" attr="0">0000000000000000</pa>
+      <pa num="0x2b" attr="0">0000000000000000</pa>
+      <pa num="0x42" attr="0">0000000000000000</pa>
+      <pa num="0x43" attr="0">00000000409f4000</pa>
+      <pa num="0x44" attr="0">00000000409f4000</pa>
+      <pa num="0x45" attr="0">00000000408f4000</pa>
+      <pa num="0x46" attr="0">00000000408f4000</pa>
+      <pa num="0x61" attr="0">00000000408f4000</pa>
+      <pa num="0x62" attr="0">000000003ff00000</pa>
+      <pa num="0x63" attr="0">0000000000000000</pa>
+      <pa num="0x64" attr="0">0000000000000000</pa>
+      <pa num="0x86" attr="0">000000003ff00000</pa>
+      <pa num="0x88" attr="0">000000003ff00000</pa>
+      <pa num="0x124" attr="0">0000000000000000</pa>
+      <pa num="0x129" attr="0">0000000000000000</pa>
+      <pa num="0x12a" attr="0">0000000000000000</pa>
+      <pa num="0x144" attr="0">0000000000000000</pa>
+      <pa num="0x163" attr="0">000000003ff00000</pa>
+      <pa num="0x168" attr="0">00000000412e8480</pa>
+      <pa num="0x169" attr="0">0000000041cdcd65</pa>
+    </parameters_f>
+  </axis>
+</APS>

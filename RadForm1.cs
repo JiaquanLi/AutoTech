@@ -9,22 +9,31 @@ using System.Windows.Forms;
 using Basler.Pylon;
 using GxMultiCam;
 using Telerik.WinControls.UI;
+using System.Threading;
+using LmiScanner;
+using System.IO;
 
- 
+
+
 
 namespace AutoTech
 {
     public partial class RadForm1 : Telerik.WinControls.UI.RadForm
     {
+
+        public delegate void DeShowLog(string strLog);
+
         frmAboutBox objfrmAbout;                                              /// <关于对话框>
 
         List<CCamerInfo> m_listCCamerInfo = new List<CCamerInfo>();           ///相机参数状态列表
         List<ICameraInfo> m_listallCameras = new List<ICameraInfo>();
         private clsFixture m_objFixture = null;
         private clsFixtureAMP204 m_objFixtureAMP204;
+        private clsFixture8338 m_objFixture8338;
         private CCBasler m_objCameraLocl;
         private System.Windows.Forms.PictureBox pbxLocal;
         clsFixture.stComPort m_objComPort;
+        private clsScanner m_objScanner;
 
         struct Line
         {
@@ -267,8 +276,9 @@ namespace AutoTech
 
                         CCamerInfo objCCamerInfo = new CCamerInfo();
                         frmShowImage objImageShowFrom = new frmShowImage();
-                        objImageShowFrom.Fixture = m_objFixture;
-                        objImageShowFrom.Fixtureapm204 = m_objFixtureAMP204;
+                        //objImageShowFrom.Fixture = m_objFixture;
+                        //objImageShowFrom.Fixtureapm204 = m_objFixtureAMP204;
+                        objImageShowFrom.Fixture = m_objFixture8338;
                         objImageShowFrom.BaslerLocalCamera = m_objCameraLocl;
                         objCCamerInfo.m_objImageShowFrom = objImageShowFrom;
 
@@ -362,7 +372,8 @@ namespace AutoTech
         {
 
             bool b_sts = false;
-            camera.m_objBasler.SetDeviceInfo(cameralInfo);           b_sts = camera.m_objBasler.ConnectToDevice();
+            camera.m_objBasler.SetDeviceInfo(cameralInfo);
+            b_sts = camera.m_objBasler.ConnectToDevice();
             if (b_sts == false) return false;
 
             camera.m_objImageShowFrom.TitleText = camera.m_strDisplayName;
@@ -375,18 +386,15 @@ namespace AutoTech
             camera.m_objImageShowFrom.Location = new Point(0, 0);
             camera.m_objImageShowFrom.Show();
 
-
             return b_sts;
-
         }
 
         private void InitListLines()
         {
 
-            this.lstBox_Lines.Columns.Add("",20,HorizontalAlignment.Left);
-            this.lstBox_Lines.Columns.Add("起点", 130, HorizontalAlignment.Left);
-            this.lstBox_Lines.Columns.Add("终点", 130, HorizontalAlignment.Left);
-
+            this.lstBox_Lines.Columns.Add("",30,HorizontalAlignment.Left);
+            this.lstBox_Lines.Columns.Add("起点", 100, HorizontalAlignment.Left);
+            this.lstBox_Lines.Columns.Add("终点", 100, HorizontalAlignment.Left);
             this.lstBox_Lines.View = View.Details;
             this.lstBox_Lines.GridLines = true;
         }
@@ -404,15 +412,48 @@ namespace AutoTech
             m_objComPort.iStopBit = Properties.Settings.Default.PLC_StopBit;
             m_objComPort.strParity = Properties.Settings.Default.PLC_Parity;
 
-            m_objFixtureAMP204 = new clsFixtureAMP204();
-            if (m_objFixtureAMP204.InitialFixture(0, 0) == false)
+            //m_objFixtureAMP204 = new clsFixtureAMP204();
+            //if (m_objFixtureAMP204.InitialFixture(Properties.Settings.Default.Card204, 0) == false)
+            //{
+            //    MessageBox.Show("APM 204 card initial fail 通信初始化失败!!!");
+            //    ShowLog("APM 204 初始化失败");
+            //    //return;
+            //}
+            //else
+            //{
+            //    ShowLog("APM 204 初始化成功");
+            //}
+
+            //m_objFixtureAMP204.ServoOn(true);
+            //m_objFixtureAMP204.HomeXY();
+
+            //scanner
+            try
             {
-                MessageBox.Show("APM 204 card initial fail 通信初始化失败!!!");
-                return;
+                clsScanner.Callback += new clsScanner.OnMessageCallback(ShowLog);
+                m_objScanner = new clsScanner();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
 
-            m_objFixtureAMP204.ServoOn(true);
-            m_objFixtureAMP204.HomeXY();
+            m_objFixture8338 = new clsFixture8338();
+            if(m_objFixture8338.InitialFixture(Properties.Settings.Default.Card8338ID) == false)
+            {
+                MessageBox.Show("card 8338  initial fail 通信初始化失败!!!");
+                ShowLog("PCIE-8338 初始化失败");
+                //return;
+            }
+            else
+            {
+                ShowLog("PCIE-8338 初始化成功");
+            }
+
+            m_objFixture8338.SickLaserPowerOnOff(true);
+            m_objFixture8338.Scanner = m_objScanner;
+            m_objFixture8338.ServoOn(true);
+            m_objFixture8338.HomeXY();
 
             //frmShowImage objImageShowFromLocal = new frmShowImage();
             //pbxLocal = objImageShowFromLocal.PbxShowImage;
@@ -439,16 +480,23 @@ namespace AutoTech
             if (findLocalCam == false)
             {
                 MessageBox.Show("局部相机 通信初始化失败!!!");
-                return;
+                ShowLog("未能找到局部相机 ID：" + Properties.Settings.Default.Camera_LocalSN);
+                //return;
             }
 
-            m_objFixture = new clsFixture();
-            m_objFixture.ComPort = m_objComPort;
-            if (m_objFixture.InitFixture() == false)
-            {
-                MessageBox.Show("PLC 通信初始化失败!!!");
-                return;
-            }
+
+            //remove plc
+            //m_objFixture = new clsFixture();
+            //m_objFixture.ComPort = m_objComPort;
+            //if (m_objFixture.InitFixture() == false)
+            //{
+            //    MessageBox.Show("PLC 通信初始化失败!!!");
+            //    ShowLog("PLC 通信失败");
+            //    //return;
+            //}
+
+
+
         }
         private void ShowException(Exception exception)
         {
@@ -457,14 +505,14 @@ namespace AutoTech
 
         private void RadForm1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            for (int i = 0; i < m_listCCamerInfo.Count; i++)
-            {
-                if (m_listCCamerInfo[i].m_Flag != -1)
-                {
-                    m_listCCamerInfo[i].m_objBasler.DestroyCamera();
-                }
+            //for (int i = 0; i < m_listCCamerInfo.Count; i++)
+            //{
+            //    if (m_listCCamerInfo[i].m_Flag != -1)
+            //    {
+            //        m_listCCamerInfo[i].m_objBasler.DestroyCamera();
+            //    }
 
-            }
+            //}
         }
 
         private void radMenuItem_DevicesRefresh_Click(object sender, EventArgs e)
@@ -483,8 +531,8 @@ namespace AutoTech
         private void radMenuItem_ConfigSetting_Click(object sender, EventArgs e)
         {
             frmConfig fmConfig = new frmConfig();
-            fmConfig.Fixture = m_objFixture;
-            fmConfig.FixtureAMP204 = m_objFixtureAMP204;
+            fmConfig.Fixture = m_objFixture8338;
+            //fmConfig.FixtureAMP204 = m_objFixtureAMP204;
             fmConfig.ShowDialog();
         }
 
@@ -501,7 +549,8 @@ namespace AutoTech
                 {
                     if (e.Node.Text == CCBasler.ConnectionType._Configuration)
                     {
-                        cmInfo.m_objBasler.SetParameter(ref this.trackbar_gain, ref this.trackbar_exposure,ref trackbar_width,ref trackbar_height);
+                        //cmInfo.m_objBasler.SetParameter(ref this.trackbar_gain, ref this.trackbar_exposure,ref trackbar_width,ref trackbar_height);
+                        cmInfo.m_objBasler.SetExposure(Properties.Settings.Default.Camera_GlobalExp);
                     }
                 }
             }
@@ -535,11 +584,17 @@ namespace AutoTech
 
         private void btn_PointStart_Click(object sender, EventArgs e)
         {
+            string strLog;
             double curXpos = 0;
             double curYpos = 0;
             m_Line = new Line();
 
-            m_objFixtureAMP204.GetPostionAbs(ref curXpos, ref curYpos);
+            m_objFixture8338.GetPostionAbs(ref curXpos, ref curYpos);
+
+            if (MessageBox.Show("确认设置为起点?", "设置", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.Cancel)
+            {
+                return;
+            }
 
             m_Line.start.X =(int) curXpos;
             m_Line.start.Y = (int)curYpos;
@@ -547,17 +602,34 @@ namespace AutoTech
             //lstItem.Text = this.lstBox_Lines.Columns.Count.ToString();
             //lstItem.SubItems.Add(curXpos.ToString() + "," + curYpos.ToString());
             //lstBox_Lines.Items.Add(lstItem);
+
+            //btn_PointStart.BackColor = Color.Green;//(233, 240, 249)
+            btn_PointStart.Enabled = false;
+
+            strLog = string.Format("设置直线起点: X={0}  Y={1}", m_Line.start.X, m_Line.start.Y);
+            ShowLog(strLog);
         }
 
         private void btn_PointEnd_Click(object sender, EventArgs e)
         {
+            string strLog;
             double curXpos = 0;
             double curYpos = 0;
 
-            m_objFixtureAMP204.GetPostionAbs(ref curXpos, ref curYpos);
+            m_objFixture8338.GetPostionAbs(ref curXpos, ref curYpos);
+
+            if (MessageBox.Show("确认设置为起点?", "设置", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.Cancel)
+            {
+                return;
+            }
 
             m_Line.end.X = (int)curXpos;
             m_Line.end.Y = (int)curYpos;
+
+            btn_PointEnd.Enabled = false;
+
+            strLog = string.Format("设置直线终点: X={0}  Y={1}", m_Line.end.X, m_Line.end.Y);
+            ShowLog(strLog);
         }
 
         private void btn_SaveLine_Click(object sender, EventArgs e)
@@ -565,35 +637,89 @@ namespace AutoTech
 
             if(m_Line.start.X == -1 || m_Line.start.Y == -1 || m_Line.end.X == -1 || m_Line.end.Y == -1)
             {
-                MessageBox.Show("请添加直线");
+                MessageBox.Show("请添加起点和终点");
                 return;
             }
+
+            if (MessageBox.Show("确认保存直线?", "设置", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.Cancel)
+            {
+                return;
+            }
+
             ListViewItem lstItem = new ListViewItem();
             lstItem.Text = (lstLines.Count +1).ToString();
-            lstItem.SubItems.Add(m_Line.start.X.ToString() + "," + m_Line.start.Y.ToString());
-            lstItem.SubItems.Add(m_Line.end.X.ToString() + "," + m_Line.end.Y.ToString());
+            lstItem.SubItems.Add(m_Line.start.X.ToString("f2") + " , " + m_Line.start.Y.ToString("f2"));
+            lstItem.SubItems.Add(m_Line.end.X.ToString("f2") + " , " + m_Line.end.Y.ToString("f2"));
             lstBox_Lines.Items.Add(lstItem);
 
             lstLines.Add(m_Line);
-
-            MessageBox.Show("添加成功");
 
             m_Line.start.X = -1;
             m_Line.start.Y = -1;
             m_Line.end.X = -1;
             m_Line.end.Y = -1;
 
+            btn_PointStart.Enabled = true;
+            btn_PointEnd.Enabled = true;
+
+            ShowLog("直线保存成功:");
+
         }
 
         private void btn_RunLins_Click(object sender, EventArgs e)
         {
-            foreach(Line line in lstLines)
+            List<LineData> data = new List<LineData>();
+            data.Clear();
+            foreach (Line line in lstLines)
             {
-                m_objFixtureAMP204.MovePT_Line(line.start.X, line.start.Y);
-                m_objFixtureAMP204.MovePT_Line(line.end.X, line.end.Y);
 
-                System.Threading.Thread.Sleep(1000);
+                //m_objFixture8338.MovePT_Line(line.start.X, line.start.Y);
+                //m_objFixture8338.MovePT_Line(line.end.X, line.end.Y);
+
+                m_objFixture8338.GetLineValues(line.start.X, line.start.Y, line.end.X, line.end.Y, ref data);
+
             }
+
+            FileStream fs = new FileStream("line_data.txt", FileMode.Create);
+            StreamWriter sr = new StreamWriter(fs);
+
+            foreach(LineData ld in data)
+            {
+                string str = string.Format("{0} {1} {2}", ld.X* 452/50000 - 536.072, ld.Y*1202/ 300000 -185.91, ld.Z);
+
+                sr.WriteLine(str);
+            }
+            sr.Close();
+            fs.Close();
+        }
+
+        private void ShowLog(string log)
+        {
+            string strDateTime = DateTime.Now.ToString();
+            string strLog;
+            strLog = strDateTime + ": " + log;
+            if (LstBox_Log.InvokeRequired)
+            {
+                // If called from a different thread, we must use the Invoke method to marshal the call to the proper thread.
+                LstBox_Log.BeginInvoke(new DeShowLog(ShowLog),new object[] { strLog});
+                return;
+            }
+
+            LstBox_Log.Items.Add(strLog);
+
+        }
+
+        private void radMenuItem_Cameral_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_Scan3D_Click(object sender, EventArgs e)
+        {
+            m_objFixture8338.SickLaserPowerOnOff(false);
+            System.Threading.Thread.Sleep(200);
+            m_objFixture8338.Scan();
+            m_objFixture8338.SickLaserPowerOnOff(true);
         }
     }
 }
