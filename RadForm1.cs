@@ -278,6 +278,7 @@ namespace AutoTech
                         frmShowImage objImageShowFrom = new frmShowImage();
                         //objImageShowFrom.Fixture = m_objFixture;
                         //objImageShowFrom.Fixtureapm204 = m_objFixtureAMP204;
+                        frmShowImage.Callback += new frmShowImage.OnMessageCallback(ShowLog);
                         objImageShowFrom.Fixture = m_objFixture8338;
                         objImageShowFrom.BaslerLocalCamera = m_objCameraLocl;
                         objCCamerInfo.m_objImageShowFrom = objImageShowFrom;
@@ -505,14 +506,7 @@ namespace AutoTech
 
         private void RadForm1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //for (int i = 0; i < m_listCCamerInfo.Count; i++)
-            //{
-            //    if (m_listCCamerInfo[i].m_Flag != -1)
-            //    {
-            //        m_listCCamerInfo[i].m_objBasler.DestroyCamera();
-            //    }
 
-            //}
         }
 
         private void radMenuItem_DevicesRefresh_Click(object sender, EventArgs e)
@@ -570,15 +564,6 @@ namespace AutoTech
                 m_objCameraLocl.bSaveImgae = true;
                 m_objCameraLocl.OneShot();
 
-                ////get cameral 
-
-                //foreach (CCamerInfo cmInfo in m_listCCamerInfo)
-                //{
-                //    if (cmInfo.m_objCameraInfo[CameraInfoKey.FriendlyName] == rootNodeSel.Text)
-                //    {
-                //        cmInfo.m_objImageShowFrom.PbxShowImage.Image.Save(saveFrom.FileName);
-                //    }
-                //}
             }
         }
 
@@ -598,12 +583,7 @@ namespace AutoTech
 
             m_Line.start.X =(int) curXpos;
             m_Line.start.Y = (int)curYpos;
-            //ListViewItem lstItem = new ListViewItem();
-            //lstItem.Text = this.lstBox_Lines.Columns.Count.ToString();
-            //lstItem.SubItems.Add(curXpos.ToString() + "," + curYpos.ToString());
-            //lstBox_Lines.Items.Add(lstItem);
 
-            //btn_PointStart.BackColor = Color.Green;//(233, 240, 249)
             btn_PointStart.Enabled = false;
 
             strLog = string.Format("设置直线起点: X={0}  Y={1}", m_Line.start.X, m_Line.start.Y);
@@ -670,14 +650,10 @@ namespace AutoTech
         {
             List<LineData> data = new List<LineData>();
             data.Clear();
+
             foreach (Line line in lstLines)
             {
-
-                //m_objFixture8338.MovePT_Line(line.start.X, line.start.Y);
-                //m_objFixture8338.MovePT_Line(line.end.X, line.end.Y);
-
                 m_objFixture8338.GetLineValues(line.start.X, line.start.Y, line.end.X, line.end.Y, ref data);
-
             }
 
             FileStream fs = new FileStream("line_data.txt", FileMode.Create);
@@ -720,6 +696,17 @@ namespace AutoTech
             System.Threading.Thread.Sleep(200);
             m_objFixture8338.Scan();
             m_objFixture8338.SickLaserPowerOnOff(true);
+        }
+
+        private void Menu_Tools_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Menu_Calibration_Click(object sender, EventArgs e)
+        {
+            FormClibration frmClibartion = new FormClibration();
+            frmClibartion.Show();
         }
     }
 }

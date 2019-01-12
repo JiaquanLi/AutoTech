@@ -34,7 +34,6 @@
             this.radMenu_ConfigSetting = new Telerik.WinControls.UI.RadMenu();
             this.radMenu2 = new Telerik.WinControls.UI.RadMenu();
             this.radMenuItem_File = new Telerik.WinControls.UI.RadMenuItem();
-            this.radMenuItem_SaveImage = new Telerik.WinControls.UI.RadMenuItem();
             this.radMenuItem_View = new Telerik.WinControls.UI.RadMenuItem();
             this.radMenuItemRecover = new Telerik.WinControls.UI.RadMenuItem();
             this.radMenuItem_Cameral = new Telerik.WinControls.UI.RadMenuItem();
@@ -70,6 +69,9 @@
             this.tw_log = new Telerik.WinControls.UI.Docking.ToolWindow();
             this.LstBox_Log = new Telerik.WinControls.UI.RadListView();
             this.toolTabStrip2 = new Telerik.WinControls.UI.Docking.ToolTabStrip();
+            this.Menu_Tools = new Telerik.WinControls.UI.RadMenuItem();
+            this.radMenuItem_SaveImage = new Telerik.WinControls.UI.RadMenuItem();
+            this.Menu_Calibration = new Telerik.WinControls.UI.RadMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.radButton1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radMenu_ConfigSetting)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radMenu2)).BeginInit();
@@ -90,7 +92,6 @@
             this.radGroupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView_Devices)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radGroupBox4)).BeginInit();
-            this.radGroupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radSplitContainer1)).BeginInit();
             this.radSplitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentContainer1)).BeginInit();
@@ -129,6 +130,7 @@
             this.radMenuItem_View,
             this.radMenuItem_Cameral,
             this.radMenuItem_Config,
+            this.Menu_Tools,
             this.radMenuItem_Help});
             this.radMenu2.Location = new System.Drawing.Point(0, 0);
             this.radMenu2.Name = "radMenu2";
@@ -141,13 +143,6 @@
             this.radMenuItem_SaveImage});
             this.radMenuItem_File.Name = "radMenuItem_File";
             this.radMenuItem_File.Text = "File";
-            // 
-            // radMenuItem_SaveImage
-            // 
-            this.radMenuItem_SaveImage.Image = global::AutoTech.Properties.Resources.ccSave;
-            this.radMenuItem_SaveImage.Name = "radMenuItem_SaveImage";
-            this.radMenuItem_SaveImage.Text = "SaveImage";
-            this.radMenuItem_SaveImage.Click += new System.EventHandler(this.radMenuItem_SaveImage_Click);
             // 
             // radMenuItem_View
             // 
@@ -327,10 +322,10 @@
             // 
             this.toolTabStrip4.RootElement.MinSize = new System.Drawing.Size(25, 25);
             this.toolTabStrip4.SelectedIndex = 0;
-            this.toolTabStrip4.Size = new System.Drawing.Size(185, 630);
-            this.toolTabStrip4.SizeInfo.AbsoluteSize = new System.Drawing.Size(185, 200);
+            this.toolTabStrip4.Size = new System.Drawing.Size(247, 630);
+            this.toolTabStrip4.SizeInfo.AbsoluteSize = new System.Drawing.Size(247, 200);
             this.toolTabStrip4.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(0F, 0.2348243F);
-            this.toolTabStrip4.SizeInfo.SplitterCorrection = new System.Drawing.Size(-15, 130);
+            this.toolTabStrip4.SizeInfo.SplitterCorrection = new System.Drawing.Size(47, 130);
             this.toolTabStrip4.TabIndex = 6;
             this.toolTabStrip4.TabStop = false;
             // 
@@ -342,7 +337,7 @@
             this.tw_Camera.Location = new System.Drawing.Point(1, 24);
             this.tw_Camera.Name = "tw_Camera";
             this.tw_Camera.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.Docked;
-            this.tw_Camera.Size = new System.Drawing.Size(183, 604);
+            this.tw_Camera.Size = new System.Drawing.Size(245, 604);
             this.tw_Camera.Text = " 相机信息";
             // 
             // tableLayoutPanel1
@@ -357,7 +352,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(183, 604);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(245, 604);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // radGroupBox3
@@ -368,7 +363,7 @@
             this.radGroupBox3.HeaderText = "Device List";
             this.radGroupBox3.Location = new System.Drawing.Point(3, 3);
             this.radGroupBox3.Name = "radGroupBox3";
-            this.radGroupBox3.Size = new System.Drawing.Size(177, 235);
+            this.radGroupBox3.Size = new System.Drawing.Size(239, 235);
             this.radGroupBox3.TabIndex = 0;
             this.radGroupBox3.Text = "Device List";
             // 
@@ -380,7 +375,7 @@
             this.radTreeView_Devices.Location = new System.Drawing.Point(2, 18);
             this.radTreeView_Devices.Name = "radTreeView_Devices";
             this.radTreeView_Devices.ShowLines = true;
-            this.radTreeView_Devices.Size = new System.Drawing.Size(173, 215);
+            this.radTreeView_Devices.Size = new System.Drawing.Size(235, 215);
             this.radTreeView_Devices.SpacingBetweenNodes = -1;
             this.radTreeView_Devices.TabIndex = 0;
             this.radTreeView_Devices.SelectedNodeChanged += new Telerik.WinControls.UI.RadTreeView.RadTreeViewEventHandler(this.radTreeView_Devices_SelectedNodeChanged);
@@ -393,12 +388,23 @@
             this.imageList1.Images.SetKeyName(0, "dbCalibratedImageSymbol.png");
             this.imageList1.Images.SetKeyName(1, "on.png");
             this.imageList1.Images.SetKeyName(2, "off.png");
-           
+            // 
+            // radGroupBox4
+            // 
+            this.radGroupBox4.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
+            this.radGroupBox4.HeaderText = "";
+            this.radGroupBox4.Location = new System.Drawing.Point(3, 244);
+            this.radGroupBox4.Name = "radGroupBox4";
+            this.radGroupBox4.Size = new System.Drawing.Size(200, 100);
+            this.radGroupBox4.TabIndex = 1;
+            // 
+            // radSplitContainer1
+            // 
             this.radSplitContainer1.CausesValidation = false;
             this.radSplitContainer1.Controls.Add(this.documentContainer1);
             this.radSplitContainer1.Controls.Add(this.toolTabStrip1);
             this.radSplitContainer1.IsCleanUpTarget = true;
-            this.radSplitContainer1.Location = new System.Drawing.Point(194, 5);
+            this.radSplitContainer1.Location = new System.Drawing.Point(256, 5);
             this.radSplitContainer1.Name = "radSplitContainer1";
             this.radSplitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             this.radSplitContainer1.Padding = new System.Windows.Forms.Padding(5);
@@ -406,9 +412,9 @@
             // 
             // 
             this.radSplitContainer1.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.radSplitContainer1.Size = new System.Drawing.Size(600, 630);
-            this.radSplitContainer1.SizeInfo.AbsoluteSize = new System.Drawing.Size(592, 200);
-            this.radSplitContainer1.SizeInfo.SplitterCorrection = new System.Drawing.Size(-103, 0);
+            this.radSplitContainer1.Size = new System.Drawing.Size(538, 630);
+            this.radSplitContainer1.SizeInfo.AbsoluteSize = new System.Drawing.Size(538, 200);
+            this.radSplitContainer1.SizeInfo.SplitterCorrection = new System.Drawing.Size(-165, 0);
             this.radSplitContainer1.TabIndex = 2;
             this.radSplitContainer1.TabStop = false;
             // 
@@ -437,7 +443,7 @@
             // 
             this.documentTabStrip1.RootElement.MinSize = new System.Drawing.Size(25, 25);
             this.documentTabStrip1.SelectedIndex = 0;
-            this.documentTabStrip1.Size = new System.Drawing.Size(600, 460);
+            this.documentTabStrip1.Size = new System.Drawing.Size(538, 460);
             this.documentTabStrip1.TabIndex = 0;
             this.documentTabStrip1.TabStop = false;
             // 
@@ -449,7 +455,7 @@
             this.tw_GlobalImage.Location = new System.Drawing.Point(6, 29);
             this.tw_GlobalImage.Name = "tw_GlobalImage";
             this.tw_GlobalImage.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.Docked;
-            this.tw_GlobalImage.Size = new System.Drawing.Size(588, 425);
+            this.tw_GlobalImage.Size = new System.Drawing.Size(526, 425);
             this.tw_GlobalImage.Text = "相机窗口";
             // 
             // panel_image
@@ -457,7 +463,7 @@
             this.panel_image.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_image.Location = new System.Drawing.Point(0, 0);
             this.panel_image.Name = "panel_image";
-            this.panel_image.Size = new System.Drawing.Size(588, 425);
+            this.panel_image.Size = new System.Drawing.Size(526, 425);
             this.panel_image.TabIndex = 0;
             // 
             // toolTabStrip1
@@ -472,7 +478,7 @@
             // 
             this.toolTabStrip1.RootElement.MinSize = new System.Drawing.Size(25, 25);
             this.toolTabStrip1.SelectedIndex = 0;
-            this.toolTabStrip1.Size = new System.Drawing.Size(600, 166);
+            this.toolTabStrip1.Size = new System.Drawing.Size(538, 166);
             this.toolTabStrip1.SizeInfo.AbsoluteSize = new System.Drawing.Size(200, 166);
             this.toolTabStrip1.SizeInfo.SplitterCorrection = new System.Drawing.Size(0, -34);
             this.toolTabStrip1.TabIndex = 1;
@@ -486,7 +492,7 @@
             this.tw_log.Location = new System.Drawing.Point(1, 24);
             this.tw_log.Name = "tw_log";
             this.tw_log.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.Docked;
-            this.tw_log.Size = new System.Drawing.Size(598, 140);
+            this.tw_log.Size = new System.Drawing.Size(536, 140);
             this.tw_log.Text = "信息显示";
             // 
             // LstBox_Log
@@ -494,7 +500,7 @@
             this.LstBox_Log.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LstBox_Log.Location = new System.Drawing.Point(0, 0);
             this.LstBox_Log.Name = "LstBox_Log";
-            this.LstBox_Log.Size = new System.Drawing.Size(598, 140);
+            this.LstBox_Log.Size = new System.Drawing.Size(536, 140);
             this.LstBox_Log.TabIndex = 0;
             // 
             // toolTabStrip2
@@ -515,6 +521,27 @@
             this.toolTabStrip2.SizeInfo.SplitterCorrection = new System.Drawing.Size(42, -130);
             this.toolTabStrip2.TabIndex = 7;
             this.toolTabStrip2.TabStop = false;
+            // 
+            // Menu_Tools
+            // 
+            this.Menu_Tools.Items.AddRange(new Telerik.WinControls.RadItem[] {
+            this.Menu_Calibration});
+            this.Menu_Tools.Name = "Menu_Tools";
+            this.Menu_Tools.Text = "工具‘";
+            this.Menu_Tools.Click += new System.EventHandler(this.Menu_Tools_Click);
+            // 
+            // radMenuItem_SaveImage
+            // 
+            this.radMenuItem_SaveImage.Image = global::AutoTech.Properties.Resources.ccSave;
+            this.radMenuItem_SaveImage.Name = "radMenuItem_SaveImage";
+            this.radMenuItem_SaveImage.Text = "SaveImage";
+            this.radMenuItem_SaveImage.Click += new System.EventHandler(this.radMenuItem_SaveImage_Click);
+            // 
+            // Menu_Calibration
+            // 
+            this.Menu_Calibration.Name = "Menu_Calibration";
+            this.Menu_Calibration.Text = "标定工具";
+            this.Menu_Calibration.Click += new System.EventHandler(this.Menu_Calibration_Click);
             // 
             // RadForm1
             // 
@@ -552,7 +579,6 @@
             this.radGroupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView_Devices)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radGroupBox4)).EndInit();
-            this.radGroupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.radSplitContainer1)).EndInit();
             this.radSplitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.documentContainer1)).EndInit();
@@ -613,5 +639,7 @@
         private Telerik.WinControls.UI.RadListView LstBox_Log;
         private Telerik.WinControls.UI.RadMenuItem Menu_LMI;
         private Telerik.WinControls.UI.RadButton btn_Scan3D;
+        private Telerik.WinControls.UI.RadMenuItem Menu_Tools;
+        private Telerik.WinControls.UI.RadMenuItem Menu_Calibration;
     }
 }

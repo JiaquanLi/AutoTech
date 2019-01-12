@@ -133,6 +133,12 @@
     <Compile Include="clsFixture8338.cs" />
     <Compile Include="clsFixtureAMP204.cs" />
     <Compile Include="clsScanner.cs" />
+    <Compile Include="FormClibration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormClibration.Designer.cs">
+      <DependentUpon>FormClibration.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmAboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -163,6 +169,9 @@
     <Compile Include="RadForm1.Designer.cs">
       <DependentUpon>RadForm1.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="FormClibration.resx">
+      <DependentUpon>FormClibration.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmAboutBox.resx">
       <DependentUpon>frmAboutBox.cs</DependentUpon>
     </EmbeddedResource>

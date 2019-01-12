@@ -26,7 +26,7 @@ namespace AutoTech
         public int CardName = 0;
         public int CardId = -1;
         private const int MOD_No_AI = 2;
-        private const string txtXmlFilename = "PCIe-8338.xml.xml";
+        private const string txtXmlFilename = "PCIe-8338.xml";
 
         const int _selectAxisX = 1;
         const int _selectAxisY = 0;
@@ -52,6 +52,7 @@ namespace AutoTech
         {
             if (CardId != -1)
             {
+                SickLaserPowerOnOff(false);
                 Class_8338.StopFieldBUS(CardId);//停止总线
                 Class_8338.Close();//关闭卡片
             }
@@ -118,17 +119,27 @@ namespace AutoTech
             int homeMode = 0;
             int homeDir = 1;
             double praCurve = 0.5;
-            double praAcc = 1000000;
-            double praVm = 5000;
+            double praAcc = 100000;
+            double praVmX = 5000;
+            double praVmY = 20000;
+
+            double curX, curY;
+            Task taskX = null;
+            Task taskY = null;
+            curX = -1;
+            curY = -1;
             if (IsInitialed == false) return;
 
-            Task taskX = new Task(() => Class_8338.StartHoming(_selectAxisX, homeMode, homeDir, praCurve, praAcc, praVm));
-            Task taskY = new Task(() => Class_8338.StartHoming(_selectAxisY, homeMode, homeDir, praCurve, praAcc, praVm));
-            taskX.Start();
-            taskY.Start();
+            GetPostionAbs(ref curX, ref curY);
 
-            taskX.Wait();
-            taskY.Wait();
+            if(curX != 0 || curY != 0)
+            {
+                taskX = new Task(() => Class_8338.StartHoming(_selectAxisX, homeMode, homeDir, praCurve, praAcc, praVmX));
+                taskY = new Task(() => Class_8338.StartHoming(_selectAxisY, homeMode, homeDir, praCurve, praAcc, praVmY));
+                taskX.Start();
+                taskY.Start();
+            }
+
         }
 
         public void MoveRelative(int x, int y)

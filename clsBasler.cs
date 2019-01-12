@@ -53,7 +53,7 @@ namespace AutoTech
 
         ~CCBasler()
         {
-            DestroyCamera();
+            //DestroyCamera();
         }
 
         public static List<ICameraInfo> GetDeviceList()
@@ -88,7 +88,6 @@ namespace AutoTech
             if (objCamera == null) return -1;
 
             return (int)objCamera.Parameters[PLCamera.Height].GetMaximum();
-
 
         }
 
@@ -157,32 +156,16 @@ namespace AutoTech
 
         public void DestroyCamera()
         {
-            // Disable all parameter controls.
-            try
-            {
-                if (objCamera != null)
-                {
-
-                }
-            }
-            catch (Exception exception)
-            {
-                ShowException(exception);
-            }
-
             // Destroy the camera object.
             try
             {
-                if (objCamera != null)
-                {
                     objCamera.Close();
                     objCamera.Dispose();
                     objCamera = null;
-                }
             }
             catch (Exception exception)
             {
-                ShowException(exception);
+               // ShowException(exception);
             }
         }
 
@@ -325,7 +308,7 @@ namespace AutoTech
                             pbx_Image.Image = bitmap;
                         }
                         if (bSaveImgae)
-                               bitmap.Save(@"D:\MATPRO\image.bmp");
+                               bitmap.Save(@"image.bmp");
                         if (bitmapOld != null)
                         {
                             // Dispose the bitmap.

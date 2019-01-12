@@ -89,6 +89,11 @@ namespace LmiScanner
             sensor.Connect();
             Callback("scanner connected.");
         }
+
+        ~clsScanner()
+        {
+  
+        }
         public void StartGetPoint()
         {
             if (File.Exists(strFileSave) == true) File.Delete(strFileSave);
@@ -220,7 +225,7 @@ namespace LmiScanner
                                         length_incr = false;
                                     }
 
-                                    if (real_z > 20  && real_z < 800)
+                                    if (real_z > 60  && real_z < 800)
                                     {
                                         write.WriteLine(real_x + " " + length + " " + real_z);
                                     }
